@@ -1,6 +1,6 @@
 # Go Assessment Project
 
-###Description
+### Description
 A Go project having a config file which stores a directory of based accounts
 
 Requirements:
