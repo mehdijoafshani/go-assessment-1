@@ -7,10 +7,11 @@ import (
 )
 
 type data struct {
-	AccountsDir  string `json:"accountsDir"`
-	LogsFile     string `json:"logsFile"`
-	IsConcurrent bool   `json:"isConcurrent"`
-	IsProduction bool   `json:"isProduction"`
+	AccountsDir           string `json:"accountsDir"`
+	LogsFile              string `json:"logsFile"`
+	IsConcurrent          bool   `json:"isConcurrent"`
+	IsProduction          bool   `json:"isProduction"`
+	DefaultAccountNumbers int    `json:"defaultAccountNumbers"`
 }
 
 var Data *data

@@ -2,5 +2,7 @@
   "accountsDir": "/home/joe/testspace/accounts",
   "logsFile": "/home/joe/testspace/logs",
   "isConcurrent": false,
-  "isProduction": true
+  "isProduction": true,
+  "defaultAccountNumbers": 100
+
 }
