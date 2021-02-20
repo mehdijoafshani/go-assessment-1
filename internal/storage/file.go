@@ -1,25 +1,27 @@
 package storage
 
+import "github.com/mehdijoafshani/go-assessment-1/internal/balance"
+
 type fileStorage struct {
 	url string
 }
 
-func (fs fileStorage) create(content string) error {
+func (fs fileStorage) Create(content string) error {
 	// TODO implement
 	return nil
 }
 
-func (fs fileStorage) read(name string) (string, error) {
+func (fs fileStorage) Read(name string) (string, error) {
 	// TODO implement
 	return "", nil
 }
 
-func (fs fileStorage) update(name string, newContent string) error {
+func (fs fileStorage) Update(name string, newContent string) error {
 	// TODO implement
 	return nil
 }
 
-func createFileStorage(url string) storage {
+func createFileStorage(url string) balance.Storage {
 	return fileStorage{
 		url: url,
 	}
