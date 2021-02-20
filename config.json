@@ -1,6 +1,6 @@
 {
-  "dir": "/home/joe/testspace",
-  "concurrent": false,
-  "production": true,
-  "logs_dir": "/home/joe/testspace"
+  "accountsDir": "/home/joe/testspace/accounts",
+  "logsFile": "/home/joe/testspace/logs",
+  "isConcurrent": false,
+  "isProduction": true
 }
