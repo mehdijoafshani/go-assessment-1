@@ -31,7 +31,7 @@ func (m Manager) GetAll() (int64, error) {
 }
 
 func (m Manager) Get(id int) (int, error) {
-	balance, err := m.storage.Read(id)
+	balance, err := m.storage.GetBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to read the balance from the storage", zap.Error(err))
 		return 0, err
@@ -51,14 +51,8 @@ func (m Manager) AddToAll(increment int) error {
 }
 
 func (m Manager) Add(increment int, id int) error {
-	currentBalance, err := m.Get(id)
-	if err != nil {
-		logger.Zap().Error("failed to fetch the current balance from the storage in order to update it", zap.Error(err))
-		return err
-	}
-
-	// TODO: is zero balance allowed ?
-	err = m.storage.Update(id, currentBalance)
+	// TODO: is zero balance allowed (negative increment)?
+	err := m.storage.IncreaseBalance(id, increment)
 	if err != nil {
 		logger.Zap().Error("failed to update the balance in the storage", zap.Error(err))
 		return err
