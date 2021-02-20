@@ -1,7 +1,7 @@
 package balance
 
 type Storage interface {
-	Create(content string) error
-	Read(name string) (string, error)
-	Update(name string, newContent string) error
+	Create(id int, content string) error
+	Read(id int) (int, error)
+	Update(id int, newContent int) error
 }
