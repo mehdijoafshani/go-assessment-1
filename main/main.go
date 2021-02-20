@@ -16,4 +16,6 @@ func main() {
 	if err != nil {
 		logger.Zap().Fatal("failed to start REST service", zap.Error(err))
 	}
+
+	// TODO: close possible opened connections
 }

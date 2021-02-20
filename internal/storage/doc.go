@@ -1,2 +1,2 @@
 //TODO add package doc
-package data
+package storage
