@@ -8,6 +8,7 @@ import (
 type Config struct {
 	Dir        string `json:"dir"`
 	Concurrent bool   `json:concurrent`
+	Production string `json:"production"`
 }
 
 func Setup() {

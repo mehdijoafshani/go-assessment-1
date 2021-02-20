@@ -1,4 +1,5 @@
 {
   "dir": "/some/dir",
-  "concurrent": false
+  "concurrent": false,
+  "production": true
 }
