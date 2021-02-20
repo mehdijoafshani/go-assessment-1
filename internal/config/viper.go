@@ -5,11 +5,14 @@ import (
 	"log"
 )
 
-type Config struct {
+type data struct {
 	Dir        string `json:"dir"`
+	LogsDir    string `json:"logs_dir"`
 	Concurrent bool   `json:concurrent`
-	Production string `json:"production"`
+	Production bool   `json:"production"`
 }
+
+var Data *data
 
 func Setup() {
 	viper.AddConfigPath(".")
@@ -20,8 +23,8 @@ func Setup() {
 		log.Fatalf("failed to read the config file: %v", err)
 	}
 
-	conf := &Config{}
-	err = viper.Unmarshal(conf)
+	Data = &data{}
+	err = viper.Unmarshal(Data)
 	if err != nil {
 		panic("unable to decode into config struct")
 	}
