@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"go.uber.org/zap"
@@ -140,6 +141,8 @@ func addToAllBalances(c *gin.Context) {
 }
 
 func StartRestServer() error {
+	manager = balance.CreateManager(config.Data.IsConcurrent)
+
 	gin.SetMode(gin.ReleaseMode)
 	// TODO fix gin logger
 
