@@ -4,32 +4,36 @@ import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"go.uber.org/zap"
 	"log"
+	"sync"
 )
 
-var logger *zap.Logger
+var zapLogger *zap.Logger
 
-// No need to "sync.once", as the logger is going to be created only once
-// No need to be thread safe
-func init() {
-	var cfg zap.Config
-	if config.Data.Production {
-		cfg = zap.NewProductionConfig()
-	} else {
-		cfg = zap.NewDevelopmentConfig()
-	}
+// to make sure zap would be setup only once
+var setupOnce sync.Once
 
-	cfg.OutputPaths = []string{
-		config.Data.LogsDir,
-	}
+func SetupZap() {
+	setupOnce.Do(func() {
+		var cfg zap.Config
+		if config.Data.IsProduction {
+			cfg = zap.NewProductionConfig()
+		} else {
+			cfg = zap.NewDevelopmentConfig()
+		}
 
-	//explicitly define var err, to avoid confusion in the next line
-	var err error
-	logger, err = cfg.Build()
-	if err != nil {
-		log.Panic("failed to build zap logger", err)
-	}
+		cfg.OutputPaths = []string{
+			config.Data.LogsFile,
+		}
+
+		//explicitly define var err, to avoid confusion in the next line
+		var err error
+		zapLogger, err = cfg.Build()
+		if err != nil {
+			log.Panic("failed to build zap logger", err)
+		}
+	})
 }
 
 func Zap() *zap.Logger {
-	return logger
+	return zapLogger
 }

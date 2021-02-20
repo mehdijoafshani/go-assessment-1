@@ -3,29 +3,36 @@ package config
 import (
 	"github.com/spf13/viper"
 	"log"
+	"sync"
 )
 
 type data struct {
-	Dir        string `json:"dir"`
-	LogsDir    string `json:"logs_dir"`
-	Concurrent bool   `json:concurrent`
-	Production bool   `json:"production"`
+	AccountsDir  string `json:"accountsDir"`
+	LogsFile     string `json:"logsFile"`
+	IsConcurrent bool   `json:"isConcurrent"`
+	IsProduction bool   `json:"isProduction"`
 }
 
 var Data *data
 
-func Setup() {
-	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
+// to make sure viper would be setup only once
+var setupOnce sync.Once
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatalf("failed to read the config file: %v", err)
-	}
+func SetupViper() {
+	setupOnce.Do(func() {
+		viper.AddConfigPath(".")
+		viper.SetConfigName("config")
 
-	Data = &data{}
-	err = viper.Unmarshal(Data)
-	if err != nil {
-		panic("unable to decode into config struct")
-	}
+		err := viper.ReadInConfig()
+		if err != nil {
+			log.Fatalf("failed to read the config file: %v", err)
+		}
+
+		Data = &data{}
+		err = viper.Unmarshal(Data)
+		log.Println("LogsDir", Data)
+		if err != nil {
+			panic("unable to decode into config struct")
+		}
+	})
 }
