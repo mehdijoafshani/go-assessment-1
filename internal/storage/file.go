@@ -1,6 +1,6 @@
 package storage
 
-import "github.com/mehdijoafshani/go-assessment-1/internal/balance"
+import "github.com/mehdijoafshani/go-assessment-1/balance"
 
 type fileStorage struct {
 	url string

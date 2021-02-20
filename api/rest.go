@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
+	"github.com/mehdijoafshani/go-assessment-1/balance"
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"go.uber.org/zap"
