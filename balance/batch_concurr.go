@@ -1,10 +1,8 @@
 package balance
 
-import "github.com/mehdijoafshani/go-assessment-1/internal/amount"
-
 type concurrentBatch struct {
 	storageMng    StorageManager
-	amountManager amount.amountManager
+	amountManager AmountManager
 }
 
 func (cb concurrentBatch) create(accountsNum int) error {
@@ -22,7 +20,7 @@ func (cb concurrentBatch) addToAll(increment int) error {
 	return nil
 }
 
-func createConcurrentBatch(storageMng StorageManager, amountManager amount.amountManager) concurrentBatch {
+func createConcurrentBatch(storageMng StorageManager, amountManager AmountManager) concurrentBatch {
 	return concurrentBatch{
 		storageMng:    storageMng,
 		amountManager: amountManager,
