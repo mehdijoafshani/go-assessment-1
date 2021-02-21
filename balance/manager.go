@@ -74,8 +74,7 @@ func CreateManager(isConcurrent bool) Manager {
 	}
 
 	if isConcurrent {
-		mng.batch = createConcurrentBatch(storageMng, amountMng, concurrencyMng,
-			createSingleOperationTask(storageMng, amountMng))
+		mng.batch = createConcurrentBatch(storageMng, amountMng, concurrencyMng, singleOpMng)
 	} else {
 		mng.batch = createSerialBatch(storageMng, amountMng, singleOpMng)
 	}
