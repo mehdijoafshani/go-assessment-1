@@ -7,8 +7,6 @@ import (
 )
 
 func TestFileName(t *testing.T) {
-	initTestEnv()
-
 	dir := "/some/path"
 	id := 0
 	expectedFileName := "/some/path/0" + config.Data.BalanceFileExtension

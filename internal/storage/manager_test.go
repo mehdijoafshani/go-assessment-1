@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func initTestEnv() {
+func init() {
 	config.SetupViper(filepath.Join("..", ".."))
 	logger.SetupZap()
 }

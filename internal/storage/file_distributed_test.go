@@ -9,7 +9,6 @@ import (
 )
 
 func TestFileDistributedGetInt(t *testing.T) {
-	initTestEnv()
 	test.RewriteTestDataOnFiles()
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
@@ -20,7 +19,6 @@ func TestFileDistributedGetInt(t *testing.T) {
 }
 
 func TestFileDistributedGetIntInvalidId(t *testing.T) {
-	initTestEnv()
 	test.RewriteTestDataOnFiles()
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
@@ -29,7 +27,6 @@ func TestFileDistributedGetIntInvalidId(t *testing.T) {
 }
 
 func TestFileDistributedGetIntNoFile(t *testing.T) {
-	initTestEnv()
 	test.RemoveAllTestFiles()
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
@@ -39,7 +36,6 @@ func TestFileDistributedGetIntNoFile(t *testing.T) {
 }
 
 func TestFileDistributedCreateInt(t *testing.T) {
-	initTestEnv()
 	test.RemoveAllTestFiles()
 
 	id := test.Balances[0].Id
@@ -55,7 +51,6 @@ func TestFileDistributedCreateInt(t *testing.T) {
 }
 
 func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
-	initTestEnv()
 	test.RewriteTestDataOnFiles()
 
 	id := test.Balances[0].Id
@@ -71,7 +66,6 @@ func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
 }
 
 func TestFileDistributedUpdateInt(t *testing.T) {
-	initTestEnv()
 	test.RewriteTestDataOnFiles()
 
 	id := test.Balances[0].Id
@@ -87,7 +81,6 @@ func TestFileDistributedUpdateInt(t *testing.T) {
 }
 
 func TestFileDistributedUpdateIntMissingFile(t *testing.T) {
-	initTestEnv()
 	test.RemoveAllTestFiles()
 
 	id := test.Balances[0].Id
