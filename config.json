@@ -1,5 +1,6 @@
 {
   "accountsDir": "/home/joe/testspace/accounts",
+  "testAccountsDir": "/home/joe/go/src/github.com/mehdijoafshani/go-assessment-1/test/testdata",
   "logsFile": "/home/joe/testspace/logs",
   "isConcurrent": false,
   "isProduction": true,

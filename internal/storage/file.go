@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"github.com/mehdijoafshani/go-assessment-1/internal/config"
+	"path/filepath"
 	"strconv"
 )
 
@@ -15,6 +15,6 @@ type file interface {
 	updateInt(id int, i int) error
 }
 
-func fileName(id int) string {
-	return config.Data.AccountsDir + strconv.Itoa(id) + fileExtension
+func fileName(url string, id int) string {
+	return filepath.Join(url, strconv.Itoa(id)+fileExtension)
 }

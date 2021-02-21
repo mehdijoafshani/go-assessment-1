@@ -15,7 +15,7 @@ func (fs fileStorage) createInt(id int, content int) error {
 	data := []byte(strconv.Itoa(content))
 
 	// TODO remove files permission hardcode
-	err := ioutil.WriteFile(fileName(id), data, 644)
+	err := ioutil.WriteFile(fileName(fs.url, id), data, 644)
 	if err != nil {
 		logger.Zap().Error("failed to create file", zap.Error(err), zap.Int("id", id))
 		return err
@@ -25,7 +25,7 @@ func (fs fileStorage) createInt(id int, content int) error {
 }
 
 func (fs fileStorage) getInt(id int) (int, error) {
-	data, err := ioutil.ReadFile(fileName(id))
+	data, err := ioutil.ReadFile(fileName(fs.url, id))
 	if err != nil {
 		logger.Zap().Error("file not found", zap.Error(err))
 		return 0, err
@@ -44,7 +44,7 @@ func (fs fileStorage) updateInt(id int, newContent int) error {
 	data := []byte(strconv.Itoa(newContent))
 
 	// TODO remove files permission hardcode
-	err := ioutil.WriteFile(fileName(id), data, 644)
+	err := ioutil.WriteFile(fileName(fs.url, id), data, 0666)
 	if err != nil {
 		logger.Zap().Error("failed to update file", zap.Error(err), zap.Int("id", id))
 		return err

@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// config should come before logger
-	config.SetupViper()
+	config.SetupViper(".")
 	logger.SetupZap()
 
 	err := api.StartRestServer()

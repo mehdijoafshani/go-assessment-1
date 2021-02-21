@@ -8,6 +8,7 @@ import (
 
 type data struct {
 	AccountsDir           string `json:"accountsDir"`
+	TestAccountsDir       string `json:"testAccountsDir"`
 	LogsFile              string `json:"logsFile"`
 	IsConcurrent          bool   `json:"isConcurrent"`
 	IsProduction          bool   `json:"isProduction"`
@@ -19,9 +20,9 @@ var Data *data
 // to make sure viper would be setup only once
 var setupOnce sync.Once
 
-func SetupViper() {
+func SetupViper(relPath string) {
 	setupOnce.Do(func() {
-		viper.AddConfigPath(".")
+		viper.AddConfigPath(relPath)
 		viper.SetConfigName("config")
 
 		err := viper.ReadInConfig()
@@ -31,7 +32,6 @@ func SetupViper() {
 
 		Data = &data{}
 		err = viper.Unmarshal(Data)
-		log.Println("LogsDir", Data)
 		if err != nil {
 			panic("unable to decode into config struct")
 		}
