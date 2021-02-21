@@ -7,8 +7,9 @@ import (
 )
 
 type serialBatch struct {
-	storageMng    StorageManager
-	amountManager AmountManager
+	storageMng      StorageManager
+	amountManager   AmountManager
+	singleOperation singleOperationManager
 }
 
 func (sb serialBatch) create(accountsNum int) error {
@@ -25,25 +26,23 @@ func (sb serialBatch) create(accountsNum int) error {
 
 	for i := 0; i < accountsNum; i++ {
 		id := i
-		amount, err := sb.amountManager.GenerateBalanceAmount(id)
-		if err != nil {
-			logger.Zap().Error("failed to generate balance amount", zap.Int("id", id), zap.Error(err))
-			return err
-		}
-
-		err = sb.storageMng.CreateBalance(id, amount)
-		// define truncErr to avoid hierarchical code
-		var truncErr error
+		err = sb.singleOperation.create(id)
 		if err != nil {
 			logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
-			truncErr = sb.storageMng.Truncate()
+			break
 		}
-		if truncErr != nil {
-			logger.Zap().Fatal("failed to truncate the storage after failed creation. The system data is in invalid state", zap.Error(truncErr))
-		}
-		if err != nil {
-			return err
-		}
+	}
+
+	// define truncErr to avoid hierarchical code
+	var truncErr error
+	if err != nil {
+		truncErr = sb.storageMng.Truncate()
+	}
+	if truncErr != nil {
+		logger.Zap().Fatal("failed to truncate the storage after failed creation. The system data is in invalid state", zap.Error(truncErr))
+	}
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -61,13 +60,13 @@ func (sb serialBatch) getAll() (int64, error) {
 	for i := 0; i < numberOfBalances; i++ {
 		id := i
 
-		amount, err := sb.storageMng.GetBalance(id)
+		balance, err := sb.singleOperation.get(id)
 		if err != nil {
 			logger.Zap().Error("failed to get balance", zap.Int("id", id), zap.Error(err))
 			return 0, err
 		}
 
-		totalBalance += int64(amount)
+		totalBalance += int64(balance)
 	}
 
 	return totalBalance, nil
@@ -83,9 +82,10 @@ func (sb serialBatch) addToAll(increment int) error {
 	for i := 0; i < numberOfBalances; i++ {
 		id := i
 
-		err := sb.storageMng.IncreaseBalance(id, increment)
+		err := sb.singleOperation.add(id, increment)
 		if err != nil {
 			logger.Zap().Error("failed to update balance", zap.Int("id", id), zap.Error(err))
+			// TODO rollback changes
 			return err
 		}
 	}
@@ -93,9 +93,10 @@ func (sb serialBatch) addToAll(increment int) error {
 	return nil
 }
 
-func createSerialBatch(storageMng StorageManager, amountManager AmountManager) serialBatch {
+func createSerialBatch(storageMng StorageManager, amountManager AmountManager, singleOperation singleOperationManager) serialBatch {
 	return serialBatch{
-		storageMng:    storageMng,
-		amountManager: amountManager,
+		storageMng:      storageMng,
+		amountManager:   amountManager,
+		singleOperation: singleOperation,
 	}
 }

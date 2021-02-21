@@ -68,7 +68,8 @@ func CreateManager(isConcurrent bool) Manager {
 	}
 
 	if isConcurrent {
-		mng.batch = createConcurrentBatch(mng.storageMng, amount.CreateAmountManager())
+		// TODO: replace the nil with a factory function call
+		mng.batch = createConcurrentBatch(mng.storageMng, amount.CreateAmountManager(), nil)
 	} else {
 		mng.batch = createSerialBatch(mng.storageMng, amount.CreateAmountManager())
 	}
