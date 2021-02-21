@@ -4,6 +4,7 @@ import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -71,4 +72,16 @@ func RemoveAllTestFiles() {
 			panic("failed to remove testdata files")
 		}
 	}
+}
+
+func ReadTestDataContentFromTestFile(id int) string {
+	dir := config.Data.TestAccountsDir
+	fileName := strconv.Itoa(id) + ".txt"
+
+	data, err := ioutil.ReadFile(filepath.Join(dir, fileName))
+	if err != nil {
+		panic("test file not found")
+	}
+
+	return string(data)
 }

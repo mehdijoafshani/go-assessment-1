@@ -4,6 +4,7 @@ import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"go.uber.org/zap"
 	"io/ioutil"
+	"os"
 	"strconv"
 )
 
@@ -12,13 +13,23 @@ type fileStorage struct {
 }
 
 func (fs fileStorage) createInt(id int, content int) error {
-	data := []byte(strconv.Itoa(content))
+	data := strconv.Itoa(content)
 
-	// TODO remove files permission hardcode
-	err := ioutil.WriteFile(fileName(fs.url, id), data, 644)
+	f, err := os.Create(fileName(fs.url, id))
 	if err != nil {
-		logger.Zap().Error("failed to create file", zap.Error(err), zap.Int("id", id))
-		return err
+		logger.Zap().Error("failed to create file (probably already exists)", zap.Error(err))
+		// JFYI despite the fact that creation should be done only once, I will not call return in this case
+		// as it's business layer's responsibility to apply these kind of rules
+	}
+
+	_, err = f.WriteString(data)
+	if err != nil {
+		logger.Zap().Error("failed to write into the file", zap.Error(err), zap.String("file", fileName(fs.url, id)))
+	}
+
+	err = f.Close()
+	if err != nil {
+		logger.Zap().Error("failed to close the file", zap.Error(err))
 	}
 
 	return nil
@@ -41,13 +52,23 @@ func (fs fileStorage) getInt(id int) (int, error) {
 }
 
 func (fs fileStorage) updateInt(id int, newContent int) error {
-	data := []byte(strconv.Itoa(newContent))
+	data := strconv.Itoa(newContent)
 
-	// TODO remove files permission hardcode
-	err := ioutil.WriteFile(fileName(fs.url, id), data, 0666)
+	f, err := os.OpenFile(fileName(fs.url, id), os.O_WRONLY|os.O_TRUNC, os.ModeAppend)
 	if err != nil {
-		logger.Zap().Error("failed to update file", zap.Error(err), zap.Int("id", id))
+		logger.Zap().Error("failed to open the file", zap.Error(err))
 		return err
+	}
+
+	_, err = f.WriteString(data)
+	if err != nil {
+		logger.Zap().Error("failed to write into the file", zap.Error(err), zap.String("file", fileName(fs.url, id)))
+		return err
+	}
+
+	err = f.Close()
+	if err != nil {
+		logger.Zap().Error("failed to close the file", zap.Error(err))
 	}
 
 	return nil
