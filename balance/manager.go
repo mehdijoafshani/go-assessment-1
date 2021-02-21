@@ -67,9 +67,9 @@ func CreateManager(isConcurrent bool) Manager {
 	}
 
 	if isConcurrent {
-		mng.batch = createConcurrentBatch(mng.storageMng)
+		mng.batch = createConcurrentBatch(mng.storageMng, createAmountManager())
 	} else {
-		mng.batch = createSerialBatch(mng.storageMng)
+		mng.batch = createSerialBatch(mng.storageMng, createAmountManager())
 	}
 
 	return mng

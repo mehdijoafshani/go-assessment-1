@@ -90,6 +90,7 @@ func (fs fileStorage) isDirEmpty() (bool, error) {
 
 	dirContents, err := dir.Readdirnames(-1)
 	if err != nil {
+		logger.Zap().Error("failed to check the number of files within the directory", zap.Error(err), zap.String("dir", fs.url))
 		return false, err
 	}
 

@@ -14,7 +14,7 @@ type Manager struct {
 func (m Manager) AreBalancesCreated() (bool, error) {
 	isEmpty, err := m.file.isDirEmpty()
 	if err != nil {
-		logger.Zap().Error("failed to check if any balance is created", zap.Error(err))
+		logger.Zap().Error("failed to check if any balance is created in the storage", zap.Error(err))
 		return false, err
 	}
 
@@ -22,8 +22,8 @@ func (m Manager) AreBalancesCreated() (bool, error) {
 	return areBalancesCreated, nil
 }
 
-func (m Manager) CreateBalance(id int, content int) error {
-	err := m.file.createInt(id, content)
+func (m Manager) CreateBalance(id int, amount int) error {
+	err := m.file.createInt(id, amount)
 	if err != nil {
 		logger.Zap().Error("failed to create balance in file", zap.Error(err))
 		return err

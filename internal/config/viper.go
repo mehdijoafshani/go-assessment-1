@@ -13,6 +13,8 @@ type data struct {
 	IsConcurrent          bool   `json:"isConcurrent"`
 	IsProduction          bool   `json:"isProduction"`
 	DefaultAccountNumbers int    `json:"defaultAccountNumbers"`
+	RandomBalanceMinRange int    `json:"randomBalanceMinRange"`
+	RandomBalanceMaxRange int    `json:"randomBalanceMaxRange"`
 }
 
 var Data *data
