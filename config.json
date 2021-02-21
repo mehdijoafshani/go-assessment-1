@@ -4,6 +4,7 @@
   "logsFile": "/home/joe/testspace/logs",
   "isConcurrent": false,
   "isProduction": true,
+  "restPort": "8080",
   "defaultAccountNumbers": 100,
   "randomBalanceMinRange": 1000,
   "randomBalanceMaxRange": 10000

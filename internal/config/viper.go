@@ -15,6 +15,7 @@ type data struct {
 	DefaultAccountNumbers int    `json:"defaultAccountNumbers"`
 	RandomBalanceMinRange int    `json:"randomBalanceMinRange"`
 	RandomBalanceMaxRange int    `json:"randomBalanceMaxRange"`
+	RestPort              string `json:"restPort"`
 }
 
 var Data *data
