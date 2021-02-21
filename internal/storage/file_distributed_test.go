@@ -3,6 +3,7 @@ package storage
 import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"github.com/mehdijoafshani/go-assessment-1/test"
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
 )
@@ -13,13 +14,9 @@ func TestFileDistributedGetInt(t *testing.T) {
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
 	balance, err := file.getInt(test.Balances[0].Id)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.Nil(t, err, "getInt should return no error")
 
-	if balance != test.Balances[0].Amount {
-		t.Error()
-	}
+	assert.Equal(t, test.Balances[0].Amount, balance, "returned balance should match the test data")
 }
 
 func TestFileDistributedGetIntInvalidId(t *testing.T) {
@@ -28,9 +25,7 @@ func TestFileDistributedGetIntInvalidId(t *testing.T) {
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
 	_, err := file.getInt(len(test.Balances))
-	if err == nil {
-		t.Error(err)
-	}
+	assert.Error(t, err, "getInt should return an error when the given id does not exist")
 }
 
 func TestFileDistributedGetIntNoFile(t *testing.T) {
@@ -39,9 +34,8 @@ func TestFileDistributedGetIntNoFile(t *testing.T) {
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
 	_, err := file.getInt(test.Balances[0].Id)
-	if err == nil {
-		t.Error(err)
-	}
+	assert.Error(t, err, "getInt should return an error when there is no balance file")
+
 }
 
 func TestFileDistributedCreateInt(t *testing.T) {
@@ -49,22 +43,15 @@ func TestFileDistributedCreateInt(t *testing.T) {
 	test.RemoveAllTestFiles()
 
 	id := test.Balances[0].Id
-	amount := test.Balances[0].Amount
+	expectedAmount := test.Balances[0].Amount
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
-	err := file.createInt(id, amount)
-	if err != nil {
-		t.Error(err)
-	}
+	err := file.createInt(id, expectedAmount)
+	assert.Nil(t, err, "should return no error")
 
-	balance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
-	if err != nil {
-		t.Error(err, "balance amount save on the file was not numeric")
-	}
-
-	if balance != amount {
-		t.Error(err, "balance amount save on the file was incorrect")
-	}
+	actualBalance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
+	assert.Nil(t, err, "the balance in the file ought to be numeric")
+	assert.Equal(t, expectedAmount, actualBalance, "the testdata amount should match the fetched one")
 }
 
 func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
@@ -72,22 +59,15 @@ func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
 	id := test.Balances[0].Id
-	amount := test.Balances[0].Amount
+	expectedAmount := test.Balances[0].Amount
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
-	err := file.createInt(id, amount)
-	if err != nil {
-		t.Error(err)
-	}
+	err := file.createInt(id, expectedAmount)
+	assert.Nil(t, err, "should return no error")
 
-	balance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
-	if err != nil {
-		t.Error(err, "balance amount save on the file was not numeric")
-	}
-
-	if balance != amount {
-		t.Error(err, "balance amount save on the file was incorrect")
-	}
+	actualBalance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
+	assert.Nil(t, err, "saved balance amount should be numeric")
+	assert.Equal(t, expectedAmount, actualBalance, "the testdata amount should match the created one")
 }
 
 func TestFileDistributedUpdateInt(t *testing.T) {
@@ -99,18 +79,11 @@ func TestFileDistributedUpdateInt(t *testing.T) {
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
 	err := file.updateInt(id, newAmount)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.Nil(t, err, "should return no error")
 
-	balance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
-	if err != nil {
-		t.Error(err, "balance amount save on the file was not numeric")
-	}
-
-	if balance != newAmount {
-		t.Error(err, "balance amount save on the file was incorrect")
-	}
+	actualBalance, err := strconv.Atoi(test.ReadTestDataContentFromTestFile(id))
+	assert.Nil(t, err, "saved balance amount should be numeric")
+	assert.Equal(t, newAmount, actualBalance, "the testdata amount should match the updated one")
 }
 
 func TestFileDistributedUpdateIntMissingFile(t *testing.T) {
@@ -122,7 +95,5 @@ func TestFileDistributedUpdateIntMissingFile(t *testing.T) {
 
 	file := createDistributedFileStorage(config.Data.TestAccountsDir)
 	err := file.updateInt(id, newAmount)
-	if err == nil {
-		t.Error(err)
-	}
+	assert.Error(t, err, "should return an error when the balance file is missing")
 }
