@@ -1,6 +1,7 @@
 package balance
 
 import (
+	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"github.com/mehdijoafshani/go-assessment-1/internal/storage"
 	"go.uber.org/zap"
@@ -67,9 +68,9 @@ func CreateManager(isConcurrent bool) Manager {
 	}
 
 	if isConcurrent {
-		mng.batch = createConcurrentBatch(mng.storageMng, createAmountManager())
+		mng.batch = createConcurrentBatch(mng.storageMng, amount.CreateAmountManager())
 	} else {
-		mng.batch = createSerialBatch(mng.storageMng, createAmountManager())
+		mng.batch = createSerialBatch(mng.storageMng, amount.CreateAmountManager())
 	}
 
 	return mng

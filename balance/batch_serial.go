@@ -8,7 +8,7 @@ import (
 
 type serialBatch struct {
 	storageMng    StorageManager
-	amountManager amountManager
+	amountManager AmountManager
 }
 
 func (sb serialBatch) create(accountsNum int) error {
@@ -25,7 +25,7 @@ func (sb serialBatch) create(accountsNum int) error {
 
 	for i := 0; i < accountsNum; i++ {
 		id := i
-		amount, err := sb.amountManager.generateBalance(id)
+		amount, err := sb.amountManager.GenerateBalanceAmount(id)
 		if err != nil {
 			logger.Zap().Error("failed to generate balance amount", zap.Int("id", id), zap.Error(err))
 			return err
@@ -59,7 +59,7 @@ func (sb serialBatch) addToAll(increment int) error {
 	return nil
 }
 
-func createSerialBatch(storageMng StorageManager, amountManager amountManager) serialBatch {
+func createSerialBatch(storageMng StorageManager, amountManager AmountManager) serialBatch {
 	return serialBatch{
 		storageMng:    storageMng,
 		amountManager: amountManager,
