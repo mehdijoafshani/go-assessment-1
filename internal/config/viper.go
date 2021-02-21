@@ -16,6 +16,7 @@ type data struct {
 	RandomBalanceMinRange int    `json:"randomBalanceMinRange"`
 	RandomBalanceMaxRange int    `json:"randomBalanceMaxRange"`
 	RestPort              string `json:"restPort"`
+	BalanceFileExtension  string `json:"balanceFileExtension"`
 }
 
 var Data *data

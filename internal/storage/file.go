@@ -1,12 +1,9 @@
 package storage
 
 import (
+	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"path/filepath"
 	"strconv"
-)
-
-const (
-	fileExtension = ".txt"
 )
 
 type file interface {
@@ -19,5 +16,5 @@ type file interface {
 }
 
 func fileName(url string, id int) string {
-	return filepath.Join(url, strconv.Itoa(id)+fileExtension)
+	return filepath.Join(url, strconv.Itoa(id)+config.Data.BalanceFileExtension)
 }

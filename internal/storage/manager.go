@@ -69,7 +69,7 @@ func (m Manager) Truncate() error {
 }
 
 func (m Manager) NumberOfBalances() (int, error) {
-	numbers, err := m.file.dirFilesNumber(fileExtension)
+	numbers, err := m.file.dirFilesNumber(config.Data.BalanceFileExtension)
 	if err != nil {
 		logger.Zap().Error("failed to get the number of balances in storage", zap.Error(err))
 		return 0, err

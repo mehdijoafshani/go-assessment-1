@@ -7,5 +7,6 @@
   "restPort": "8080",
   "defaultAccountNumbers": 100,
   "randomBalanceMinRange": 1000,
-  "randomBalanceMaxRange": 10000
+  "randomBalanceMaxRange": 10000,
+  "balanceFileExtension": ".txt"
 }

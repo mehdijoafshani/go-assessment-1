@@ -35,7 +35,7 @@ func RewriteTestDataOnFiles() {
 	for _, b := range Balances {
 		data := strconv.Itoa(b.Amount)
 
-		f, err := os.Create(filepath.Join(dir, strconv.Itoa(b.Id)+".txt"))
+		f, err := os.Create(filepath.Join(dir, strconv.Itoa(b.Id)+config.Data.BalanceFileExtension))
 		if err != nil {
 			panic("failed to create test data")
 		}
@@ -76,7 +76,7 @@ func RemoveAllTestFiles() {
 
 func ReadTestDataContentFromTestFile(id int) string {
 	dir := config.Data.TestAccountsDir
-	fileName := strconv.Itoa(id) + ".txt"
+	fileName := strconv.Itoa(id) + config.Data.BalanceFileExtension
 
 	data, err := ioutil.ReadFile(filepath.Join(dir, fileName))
 	if err != nil {

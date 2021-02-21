@@ -6,3 +6,6 @@ run:
 
 dep:
 	go mod download
+
+build:
+	go build ./...
