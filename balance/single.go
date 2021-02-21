@@ -52,7 +52,7 @@ func (s singleOperationImpl) add(id int, increment int) error {
 	return nil
 }
 
-func createSingleTask(storageMng StorageManager, amountMng AmountManager) singleOperationImpl {
+func createSingleOperationTask(storageMng StorageManager, amountMng AmountManager) singleOperationImpl {
 	return singleOperationImpl{
 		storageMng: storageMng,
 		amountMng:  amountMng,

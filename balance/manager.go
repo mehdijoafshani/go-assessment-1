@@ -63,15 +63,21 @@ func (m Manager) Add(increment int, id int) error {
 }
 
 func CreateManager(isConcurrent bool) Manager {
+	storageMng := storage.CreateManager()
+	amountMng := amount.CreateAmountManager()
+	singleOpMng := createSingleOperationTask(storageMng, amountMng)
+	// TODO: replace the nil with a factory function call
+	var concurrencyMng ConcurrencyManager = nil
+
 	mng := Manager{
-		storageMng: storage.CreateManager(),
+		storageMng: storageMng,
 	}
 
 	if isConcurrent {
-		// TODO: replace the nil with a factory function call
-		mng.batch = createConcurrentBatch(mng.storageMng, amount.CreateAmountManager(), nil)
+		mng.batch = createConcurrentBatch(storageMng, amountMng, concurrencyMng,
+			createSingleOperationTask(storageMng, amountMng))
 	} else {
-		mng.batch = createSerialBatch(mng.storageMng, amount.CreateAmountManager())
+		mng.batch = createSerialBatch(storageMng, amountMng, singleOpMng)
 	}
 
 	return mng
