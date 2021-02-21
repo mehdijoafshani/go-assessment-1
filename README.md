@@ -14,6 +14,7 @@ The project should include a config file, which stores the directory of these fi
 
 #### TODO
 - Implement delete
-- define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error codes
-- unify file extensions
-- add error on get/update methods as there is no balance file
+- Define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error codes
+- Unify file extensions
+- Add error on get/update methods as there is no balance file
+- Enhance project terminology
