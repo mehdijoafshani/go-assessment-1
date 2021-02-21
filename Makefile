@@ -4,7 +4,8 @@ test:
 run:
 	go run main/main.go
 
-depen:
+dep:
+	go mod tidy
 	go mod download
 
 build:
