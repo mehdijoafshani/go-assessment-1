@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -96,6 +97,37 @@ func (fs fileStorage) isDirEmpty() (bool, error) {
 
 	isDirEmpty := len(dirContents) == 0
 	return isDirEmpty, nil
+}
+
+func (fs fileStorage) truncateDir() error {
+	dir, err := os.Open(fs.url)
+	if err != nil {
+		logger.Zap().Error("failed to open the directory", zap.Error(err), zap.String("dir", fs.url))
+		return err
+	}
+
+	defer func() {
+		err := dir.Close()
+		if err != nil {
+			logger.Zap().Error("failed to close the directory", zap.Error(err), zap.String("dir", fs.url))
+		}
+	}()
+
+	names, err := dir.Readdirnames(-1)
+	if err != nil {
+		logger.Zap().Error("failed to read the directory's content", zap.Error(err), zap.String("dir", fs.url))
+		return err
+	}
+	for _, name := range names {
+		filePath := filepath.Join(fs.url, name)
+		err = os.RemoveAll(filePath)
+		if err != nil {
+			logger.Zap().Error("failed to remove the file", zap.Error(err), zap.String("file", filePath))
+			return err
+		}
+	}
+
+	return nil
 }
 
 func createDistributedFileStorage(url string) fileStorage {

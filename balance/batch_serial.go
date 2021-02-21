@@ -32,9 +32,16 @@ func (sb serialBatch) create(accountsNum int) error {
 		}
 
 		err = sb.storageMng.CreateBalance(id, amount)
+		// define truncErr to avoid hierarchical code
+		var truncErr error
 		if err != nil {
 			logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
-			// TODO: truncate storage
+			truncErr = sb.storageMng.Truncate()
+		}
+		if truncErr != nil {
+			logger.Zap().Fatal("failed to truncate the storage after failed creation. The system data is in invalid state", zap.Error(truncErr))
+		}
+		if err != nil {
 			return err
 		}
 	}

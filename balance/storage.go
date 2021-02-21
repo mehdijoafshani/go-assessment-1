@@ -5,4 +5,5 @@ type StorageManager interface {
 	CreateBalance(id int, amount int) error
 	GetBalance(id int) (int, error)
 	IncreaseBalance(id int, newContent int) error
+	Truncate() error
 }

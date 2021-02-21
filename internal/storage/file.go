@@ -14,6 +14,7 @@ type file interface {
 	createInt(id int, i int) error
 	updateInt(id int, i int) error
 	isDirEmpty() (bool, error)
+	truncateDir() error
 }
 
 func fileName(url string, id int) string {

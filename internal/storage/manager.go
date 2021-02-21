@@ -58,6 +58,16 @@ func (m Manager) IncreaseBalance(id int, newContent int) error {
 	return nil
 }
 
+func (m Manager) Truncate() error {
+	err := m.file.truncateDir()
+	if err != nil {
+		logger.Zap().Error("failed to truncate the storage", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
 func CreateManager() Manager {
 	url := config.Data.AccountsDir
 

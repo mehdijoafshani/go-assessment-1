@@ -8,6 +8,7 @@ type amountManager interface {
 	generateBalance(id int) (int, error)
 }
 
+// TODO move amount generator to another package to make RandomAmountManager invisible to business layer consumers
 func createAmountManager() amountManager {
 	return createRandomAmountManager(config.Data.RandomBalanceMinRange, config.Data.RandomBalanceMaxRange)
 }
