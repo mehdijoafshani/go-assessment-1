@@ -15,6 +15,6 @@ type file interface {
 	dirFilesNumber(fileExtension string) (int, error)
 }
 
-func fileName(url string, id int) string {
-	return filepath.Join(url, strconv.Itoa(id)+config.Data.BalanceFileExtension)
+func fileName(dir string, id int) string {
+	return filepath.Join(dir, strconv.Itoa(id)+config.Data.BalanceFileExtension)
 }
