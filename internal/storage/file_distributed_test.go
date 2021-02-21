@@ -21,6 +21,17 @@ func TestGetInt(t *testing.T) {
 	}
 }
 
+func TestGetIntInvalidId(t *testing.T) {
+	initTestEnv()
+	test.RewriteTestDataOnFiles()
+
+	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	_, err := file.getInt(len(test.Balances))
+	if err == nil {
+		t.Error(err)
+	}
+}
+
 func TestGetIntNoFile(t *testing.T) {
 	initTestEnv()
 	test.RemoveAllTestFiles()

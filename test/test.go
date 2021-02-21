@@ -14,6 +14,8 @@ type Balance struct {
 	Amount int
 }
 
+// assumptions:
+//	- id of a balance equals to its index in Balances slice
 var Balances []Balance
 
 func init() {
