@@ -50,12 +50,46 @@ func (sb serialBatch) create(accountsNum int) error {
 }
 
 func (sb serialBatch) getAll() (int64, error) {
-	//TODO impl
-	return 0, nil
+	totalBalance := int64(0)
+
+	numberOfBalances, err := sb.storageMng.NumberOfBalances()
+	if err != nil {
+		logger.Zap().Error("failed to get the number of balances", zap.Error(err))
+		return 0, err
+	}
+
+	for i := 0; i < numberOfBalances; i++ {
+		id := i
+
+		amount, err := sb.storageMng.GetBalance(id)
+		if err != nil {
+			logger.Zap().Error("failed to get balance", zap.Int("id", id), zap.Error(err))
+			return 0, err
+		}
+
+		totalBalance += int64(amount)
+	}
+
+	return totalBalance, nil
 }
 
 func (sb serialBatch) addToAll(increment int) error {
-	//TODO impl
+	numberOfBalances, err := sb.storageMng.NumberOfBalances()
+	if err != nil {
+		logger.Zap().Error("failed to get the number of balances", zap.Error(err))
+		return err
+	}
+
+	for i := 0; i < numberOfBalances; i++ {
+		id := i
+
+		err := sb.storageMng.IncreaseBalance(id, increment)
+		if err != nil {
+			logger.Zap().Error("failed to update balance", zap.Int("id", id), zap.Error(err))
+			return err
+		}
+	}
+
 	return nil
 }
 

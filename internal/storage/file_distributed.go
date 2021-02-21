@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 type fileStorage struct {
@@ -128,6 +129,36 @@ func (fs fileStorage) truncateDir() error {
 	}
 
 	return nil
+}
+
+func (fs fileStorage) dirFilesNumber(fileExtension string) (int, error) {
+	dir, err := os.Open(fs.url)
+	if err != nil {
+		logger.Zap().Error("failed to open the directory", zap.Error(err), zap.String("dir", fs.url))
+		return 0, err
+	}
+
+	defer func() {
+		err := dir.Close()
+		if err != nil {
+			logger.Zap().Error("failed to close the directory", zap.Error(err), zap.String("dir", fs.url))
+		}
+	}()
+
+	names, err := dir.Readdirnames(-1)
+	if err != nil {
+		logger.Zap().Error("failed to read the directory's content", zap.Error(err), zap.String("dir", fs.url))
+		return 0, err
+	}
+
+	totalBalances := 0
+	for _, name := range names {
+		if strings.HasSuffix(name, fileExtension) {
+			totalBalances++
+		}
+	}
+
+	return totalBalances, nil
 }
 
 func createDistributedFileStorage(url string) fileStorage {

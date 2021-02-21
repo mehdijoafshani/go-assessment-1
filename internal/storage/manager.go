@@ -68,6 +68,16 @@ func (m Manager) Truncate() error {
 	return nil
 }
 
+func (m Manager) NumberOfBalances() (int, error) {
+	numbers, err := m.file.dirFilesNumber(fileExtension)
+	if err != nil {
+		logger.Zap().Error("failed to get the number of balances in storage", zap.Error(err))
+		return 0, err
+	}
+
+	return numbers, nil
+}
+
 func CreateManager() Manager {
 	url := config.Data.AccountsDir
 
