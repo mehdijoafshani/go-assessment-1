@@ -10,3 +10,8 @@ The project should include a config file, which stores the directory of these fi
     - These files (accounts' balances) could be created only once
 - An API to get the balance of one/all account(s)
 - An API to add number x to the balance of one/all account(s)
+
+
+#### TODO
+- Implement delete
+- define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error code
