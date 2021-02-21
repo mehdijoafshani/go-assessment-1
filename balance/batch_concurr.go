@@ -1,6 +1,7 @@
 package balance
 
 type concurrentBatch struct {
+	storageMng StorageManager
 }
 
 func (cb concurrentBatch) create(accountsNum int) error {
@@ -18,6 +19,8 @@ func (cb concurrentBatch) addToAll(increment int) error {
 	return nil
 }
 
-func createConcurrentBatch() concurrentBatch {
-	return concurrentBatch{}
+func createConcurrentBatch(storageMng StorageManager) concurrentBatch {
+	return concurrentBatch{
+		storageMng: storageMng,
+	}
 }

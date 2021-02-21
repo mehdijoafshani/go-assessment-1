@@ -1,6 +1,7 @@
 package balance
 
 type serialBatch struct {
+	storageMng StorageManager
 }
 
 func (sb serialBatch) create(accountsNum int) error {
@@ -18,6 +19,8 @@ func (sb serialBatch) addToAll(increment int) error {
 	return nil
 }
 
-func createSerialBatch() serialBatch {
-	return serialBatch{}
+func createSerialBatch(storageMng StorageManager) serialBatch {
+	return serialBatch{
+		storageMng: storageMng,
+	}
 }

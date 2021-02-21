@@ -47,7 +47,7 @@ func (m Manager) IncreaseBalance(id int, newContent int) error {
 	return nil
 }
 
-func Get() Manager {
+func CreateManager() Manager {
 	url := config.Data.AccountsDir
 
 	return Manager{

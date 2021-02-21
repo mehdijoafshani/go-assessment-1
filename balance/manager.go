@@ -7,8 +7,8 @@ import (
 )
 
 type Manager struct {
-	batch   batch
-	storage Storage
+	batch      batch
+	storageMng StorageManager
 }
 
 func (m Manager) Create(accountsNum int) error {
@@ -31,9 +31,9 @@ func (m Manager) GetAll() (int64, error) {
 }
 
 func (m Manager) Get(id int) (int, error) {
-	balance, err := m.storage.GetBalance(id)
+	balance, err := m.storageMng.GetBalance(id)
 	if err != nil {
-		logger.Zap().Error("failed to read the balance from the storage", zap.Error(err))
+		logger.Zap().Error("failed to read the balance from the storageMng", zap.Error(err))
 		return 0, err
 	}
 
@@ -52,9 +52,9 @@ func (m Manager) AddToAll(increment int) error {
 
 func (m Manager) Add(increment int, id int) error {
 	// TODO: is zero balance allowed (negative increment)?
-	err := m.storage.IncreaseBalance(id, increment)
+	err := m.storageMng.IncreaseBalance(id, increment)
 	if err != nil {
-		logger.Zap().Error("failed to update the balance in the storage", zap.Error(err))
+		logger.Zap().Error("failed to update the balance in the storageMng", zap.Error(err))
 		return err
 	}
 
@@ -63,13 +63,13 @@ func (m Manager) Add(increment int, id int) error {
 
 func CreateManager(isConcurrent bool) Manager {
 	mng := Manager{
-		storage: storage.Get(),
+		storageMng: storage.CreateManager(),
 	}
 
 	if isConcurrent {
-		mng.batch = createSerialBatch()
+		mng.batch = createConcurrentBatch(mng.storageMng)
 	} else {
-		mng.batch = createConcurrentBatch()
+		mng.batch = createSerialBatch(mng.storageMng)
 	}
 
 	return mng
