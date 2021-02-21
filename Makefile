@@ -4,7 +4,7 @@ test:
 run:
 	go run main/main.go
 
-dep:
+depen:
 	go mod download
 
 build:
