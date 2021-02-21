@@ -11,6 +11,17 @@ type Manager struct {
 	file file
 }
 
+func (m Manager) AreBalancesCreated() (bool, error) {
+	isEmpty, err := m.file.isDirEmpty()
+	if err != nil {
+		logger.Zap().Error("failed to check if any balance is created", zap.Error(err))
+		return false, err
+	}
+
+	areBalancesCreated := !isEmpty
+	return areBalancesCreated, nil
+}
+
 func (m Manager) CreateBalance(id int, content int) error {
 	err := m.file.createInt(id, content)
 	if err != nil {

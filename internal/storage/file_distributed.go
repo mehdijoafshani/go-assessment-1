@@ -74,6 +74,29 @@ func (fs fileStorage) updateInt(id int, newContent int) error {
 	return nil
 }
 
+func (fs fileStorage) isDirEmpty() (bool, error) {
+	dir, err := os.Open(fs.url)
+	if err != nil {
+		logger.Zap().Error("failed to open the dir", zap.Error(err), zap.String("dir", fs.url))
+		return false, err
+	}
+
+	defer func() {
+		err := dir.Close()
+		if err != nil {
+			logger.Zap().Error("failed to close the dir", zap.Error(err), zap.String("dir", fs.url))
+		}
+	}()
+
+	dirContents, err := dir.Readdirnames(-1)
+	if err != nil {
+		return false, err
+	}
+
+	isDirEmpty := len(dirContents) == 0
+	return isDirEmpty, nil
+}
+
 func createDistributedFileStorage(url string) fileStorage {
 	return fileStorage{
 		url: url,

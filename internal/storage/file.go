@@ -13,6 +13,7 @@ type file interface {
 	getInt(id int) (int, error)
 	createInt(id int, i int) error
 	updateInt(id int, i int) error
+	isDirEmpty() (bool, error)
 }
 
 func fileName(url string, id int) string {
