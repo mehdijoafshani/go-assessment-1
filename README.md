@@ -14,5 +14,5 @@ The project should include a config file, which stores the directory of these fi
 
 #### TODO
 - Implement delete
-- define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error code
+- define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error codes
 - unify file extensions
