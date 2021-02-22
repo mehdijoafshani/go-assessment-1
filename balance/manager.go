@@ -9,8 +9,9 @@ import (
 )
 
 type Manager struct {
-	batch      batch
-	storageMng StorageManager
+	batch       batch
+	storageMng  StorageManager
+	singleOpMng singleOperationManager
 }
 
 func (m Manager) Create(accountsNum int) error {
@@ -62,7 +63,7 @@ func (m Manager) GetAll() (int64, error) {
 }
 
 func (m Manager) Get(id int) (int, error) {
-	balance, err := m.storageMng.GetBalance(id)
+	balance, err := m.singleOpMng.get(id)
 	if err != nil {
 		logger.Zap().Error("failed to read the balance from the storageMng", zap.Error(err))
 		return 0, err
@@ -90,7 +91,7 @@ func (m Manager) AddToAll(increment int) error {
 
 func (m Manager) Add(increment int, id int) error {
 	// TODO: is zero balance allowed (negative increment)?
-	err := m.storageMng.IncreaseBalance(id, increment)
+	err := m.singleOpMng.add(id, increment)
 	if err != nil {
 		logger.Zap().Error("failed to update the balance in the storageMng", zap.Error(err))
 		return err
