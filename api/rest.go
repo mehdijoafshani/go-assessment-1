@@ -36,7 +36,8 @@ func create(c *gin.Context) {
 	if err != nil {
 		logger.Zap().Error("failed to create accounts", zap.Error(err))
 		// TODO: return more explicit error code
-		c.String(http.StatusInternalServerError, "failed to create accounts")
+		// Temporarily I will return the error message to the client
+		c.String(http.StatusInternalServerError, "failed to create accounts, err: %s", err)
 		return
 	}
 
@@ -44,12 +45,12 @@ func create(c *gin.Context) {
 }
 
 func getBalance(c *gin.Context) {
-	idS := c.Query("id")
+	idStr := c.Query("id")
 
-	id, err := strconv.Atoi(idS)
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		logger.Zap().Debug("non-numeric parameter for an account's id to get balance",
-			zap.String("id", idS),
+			zap.String("id", idStr),
 			zap.Error(err))
 
 		c.String(http.StatusUnprocessableEntity, "id ought to be numeric")
@@ -64,7 +65,7 @@ func getBalance(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "balance is", balance)
+	c.String(http.StatusOK, "%d", balance)
 }
 
 func getAllBalances(c *gin.Context) {
@@ -76,7 +77,7 @@ func getAllBalances(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "the sum of all accounts' balances is", balance)
+	c.String(http.StatusOK, "%d", balance)
 }
 
 func addBalance(c *gin.Context) {
@@ -116,7 +117,7 @@ func addBalance(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "the extra balance ", balance, " is applied to id ", id)
+	c.String(http.StatusOK, "the extra balance %d  is applied to id %d", balance, id)
 }
 
 func addToAllBalances(c *gin.Context) {
@@ -144,7 +145,7 @@ func addToAllBalances(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "the extra balance", balance, " is applied to all accounts")
+	c.String(http.StatusOK, "the extra balance %d is applied to all accounts", balance)
 }
 
 func StartRestServer() error {
