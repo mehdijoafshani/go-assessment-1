@@ -13,6 +13,8 @@ func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids
 	results := make(chan int, jobsNum)
 	errorCh := make(chan error, jobsNum)
 
+	remainingJobs := jobsNum
+
 	// create workers
 	for workerIndex := 0; workerIndex < maxGoroutines; workerIndex++ {
 		go worker(jobs, results, errorCh)
@@ -23,18 +25,23 @@ func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids
 		jobs <- jobIndex
 		logger.Zap().Info("pooling, job sent", zap.Int("job id", jobIndex))
 	}
-	close(jobs)
 
-	for len(results) > 0 {
+	for {
 		select {
 		case err := <-errorCh:
 			logger.Zap().Info("pooling, error received", zap.Error(err))
-			return err
+			break
 		case result := <-results:
 			logger.Zap().Info("pooling, result received", zap.Int("result", result))
+			remainingJobs--
 			resultHandler(result)
 		}
+
+		if remainingJobs == 0 {
+			break
+		}
 	}
+	close(jobs)
 
 	return nil
 }
