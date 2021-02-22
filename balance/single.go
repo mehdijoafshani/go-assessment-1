@@ -5,6 +5,11 @@ import (
 	"go.uber.org/zap"
 )
 
+// #SOLID: I
+// Different interfaces have been declared to specify operation management, single operation and batch operation
+// It means if a struct needs to satisfy only single objects, they do not have to implement batch methods such as ReadAll ...
+// This means that Interface Segregation principle has been satisfied
+
 type singleOperationManager interface {
 	createBalance(id int) error
 	getBalance(id int) (int, error)
