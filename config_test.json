@@ -1,5 +1,5 @@
 {
-  "accountsDir": "/home/joe/testspace/accounts",
+  "accountsDir": "/home/joe/go/src/github.com/mehdijoafshani/go-assessment-1/test/testdata",
   "logsFile": "/home/joe/testspace/logs",
   "isConcurrent": true,
   "isProduction": false,
@@ -7,6 +7,6 @@
   "defaultAccountNumbers": 100,
   "randomBalanceMinRange": 1000,
   "randomBalanceMaxRange": 100000,
-  "maxConcurrentGoroutines": 100,
+  "maxConcurrentGoroutines": 1,
   "balanceFileExtension": ".txt"
 }

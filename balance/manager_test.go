@@ -1,4 +1,4 @@
-package storage
+package balance
 
 import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
@@ -7,6 +7,6 @@ import (
 )
 
 func init() {
-	config.SetupTestViper(filepath.Join("..", ".."))
+	config.SetupTestViper(filepath.Join(".."))
 	logger.SetupZap()
 }

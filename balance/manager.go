@@ -2,6 +2,7 @@ package balance
 
 import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
+	"github.com/mehdijoafshani/go-assessment-1/internal/concurrency"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"github.com/mehdijoafshani/go-assessment-1/internal/storage"
 	"github.com/pkg/errors"
@@ -83,6 +84,7 @@ func (m Manager) AddToAll(increment int) error {
 	if err != nil {
 		logger.Zap().Error("failed to addBalance extra balance to all accounts", zap.Error(err))
 		// TODO (IMPORTANT): rollback made changes !
+		// Probably these will depend on the type of batch process (serial vs parallel)
 		return err
 	}
 
@@ -104,11 +106,11 @@ func CreateManager(isConcurrent bool) Manager {
 	storageMng := storage.CreateManager()
 	amountMng := amount.CreateAmountManager()
 	singleOpMng := createSingleOperationTask(storageMng, amountMng)
-	// TODO: replace the nil with a factory function call
-	var concurrencyMng ConcurrencyManager = nil
+	concurrencyMng := concurrency.CreateManager()
 
 	mng := Manager{
-		storageMng: storageMng,
+		storageMng:  storageMng,
+		singleOpMng: singleOpMng,
 	}
 
 	if isConcurrent {

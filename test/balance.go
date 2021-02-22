@@ -1,6 +1,7 @@
 package test
 
 import (
+	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
 	"github.com/mehdijoafshani/go-assessment-1/internal/config"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"go.uber.org/zap"
@@ -24,13 +25,28 @@ func init() {
 		{Id: 0, Amount: 12_000},
 		{Id: 1, Amount: 15_000},
 		{Id: 2, Amount: 1_000},
-		{Id: 3, Amount: 10},
 	}
+}
+
+func RewriteTestDataOnFilesByNumberOfBalances(balances int) {
+	Balances = make([]Balance, 0, balances)
+	for i := 0; i < balances; i++ {
+		balanceAmount, err := amount.CreateAmountManager().GenerateBalanceAmount(i)
+		if err != nil {
+			panic("failed to generate test data, failed to generate amount")
+		}
+		Balances = append(Balances, Balance{
+			Id:     i,
+			Amount: balanceAmount,
+		})
+	}
+
+	RewriteTestDataOnFiles()
 }
 
 func RewriteTestDataOnFiles() {
 	RemoveAllTestFiles()
-	dir := config.Data.TestAccountsDir
+	dir := config.Data.AccountsDir
 
 	for _, b := range Balances {
 		data := strconv.Itoa(b.Amount)
@@ -53,7 +69,7 @@ func RewriteTestDataOnFiles() {
 }
 
 func RemoveAllTestFiles() {
-	dir := config.Data.TestAccountsDir
+	dir := config.Data.AccountsDir
 
 	d, err := os.Open(dir)
 	if err != nil {
@@ -75,7 +91,7 @@ func RemoveAllTestFiles() {
 }
 
 func ReadTestDataContentFromTestFile(id int) string {
-	dir := config.Data.TestAccountsDir
+	dir := config.Data.AccountsDir
 	fileName := strconv.Itoa(id) + config.Data.BalanceFileExtension
 
 	data, err := ioutil.ReadFile(filepath.Join(dir, fileName))

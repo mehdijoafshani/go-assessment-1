@@ -12,15 +12,18 @@ type concurrentBatch struct {
 	singleOpMng    singleOperationManager
 }
 
+const jobDone = 1
+
 func (cb concurrentBatch) createBalances(accountsNum int) error {
-	err := cb.concurrencyMng.ScheduleCreateBalances(accountsNum, func(ids <-chan int, errors chan<- error) {
+	err := cb.concurrencyMng.ScheduleCreateBalances(accountsNum, func(ids <-chan int, results chan<- int, errorCh chan<- error) {
 		for id := range ids {
 			err := cb.singleOpMng.createBalance(id)
 			if err != nil {
 				logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
+				errorCh <- err
 			}
 
-			errors <- err
+			results <- jobDone
 		}
 	})
 
@@ -32,10 +35,14 @@ func (cb concurrentBatch) createBalances(accountsNum int) error {
 }
 
 func (cb concurrentBatch) getAllBalancesSum(numberOfBalances int) (int64, error) {
-	sum, err := cb.concurrencyMng.ScheduleReadAllBalancesSum(numberOfBalances, func(ids <-chan int, results chan<- int, errors chan<- error) {
+	sum, err := cb.concurrencyMng.ScheduleReadAllBalancesSum(numberOfBalances, func(ids <-chan int, results chan<- int, errorCh chan<- error) {
 		for id := range ids {
 			balance, err := cb.singleOpMng.getBalance(id)
-			errors <- err
+			if err != nil {
+				logger.Zap().Error("failed to getBalance sum of balance", zap.Error(err), zap.Int("id", id))
+				errorCh <- err
+				return
+			}
 			results <- balance
 		}
 	})
@@ -49,12 +56,14 @@ func (cb concurrentBatch) getAllBalancesSum(numberOfBalances int) (int64, error)
 }
 
 func (cb concurrentBatch) addToAllBalances(numberOfBalances int, increment int) error {
-	err := cb.concurrencyMng.ScheduleUpdateBalances(numberOfBalances, func(ids <-chan int, errors chan<- error) {
+	err := cb.concurrencyMng.ScheduleUpdateBalances(numberOfBalances, func(ids <-chan int, results chan<- int, errorCh chan<- error) {
 		for id := range ids {
 			err := cb.singleOpMng.addBalance(id, increment)
 			logger.Zap().Error("failed to increase balance", zap.Int("id", id), zap.Error(err))
-			errors <- err
+			errorCh <- err
 		}
+
+		results <- jobDone
 	})
 
 	if err != nil {

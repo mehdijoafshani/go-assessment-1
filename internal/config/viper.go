@@ -7,16 +7,16 @@ import (
 )
 
 type data struct {
-	AccountsDir           string `json:"accountsDir"`
-	TestAccountsDir       string `json:"testAccountsDir"`
-	LogsFile              string `json:"logsFile"`
-	IsConcurrent          bool   `json:"isConcurrent"`
-	IsProduction          bool   `json:"isProduction"`
-	DefaultAccountNumbers int    `json:"defaultAccountNumbers"`
-	RandomBalanceMinRange int    `json:"randomBalanceMinRange"`
-	RandomBalanceMaxRange int    `json:"randomBalanceMaxRange"`
-	RestPort              string `json:"restPort"`
-	BalanceFileExtension  string `json:"balanceFileExtension"`
+	AccountsDir             string `json:"accountsDir"`
+	LogsFile                string `json:"logsFile"`
+	IsConcurrent            bool   `json:"isConcurrent"`
+	IsProduction            bool   `json:"isProduction"`
+	DefaultAccountNumbers   int    `json:"defaultAccountNumbers"`
+	RandomBalanceMinRange   int    `json:"randomBalanceMinRange"`
+	RandomBalanceMaxRange   int    `json:"randomBalanceMaxRange"`
+	RestPort                string `json:"restPort"`
+	BalanceFileExtension    string `json:"balanceFileExtension"`
+	MaxConcurrentGoroutines int    `json:"maxConcurrentGoroutines"`
 }
 
 var Data *data
@@ -28,6 +28,24 @@ func SetupViper(relPath string) {
 	setupOnce.Do(func() {
 		viper.AddConfigPath(relPath)
 		viper.SetConfigName("config")
+
+		err := viper.ReadInConfig()
+		if err != nil {
+			log.Fatalf("failed to read the config file: %v", err)
+		}
+
+		Data = &data{}
+		err = viper.Unmarshal(Data)
+		if err != nil {
+			panic("unable to decode into config struct")
+		}
+	})
+}
+
+func SetupTestViper(relPath string) {
+	setupOnce.Do(func() {
+		viper.AddConfigPath(relPath)
+		viper.SetConfigName("config_test")
 
 		err := viper.ReadInConfig()
 		if err != nil {

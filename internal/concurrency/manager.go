@@ -1,34 +1,45 @@
 package concurrency
 
 import (
-	"fmt"
-	"time"
+	"github.com/mehdijoafshani/go-assessment-1/internal/config"
+	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
+	"go.uber.org/zap"
+	"sync/atomic"
 )
 
-func worker(id int, jobs <-chan int, results chan<- int) {
-	for j := range jobs {
-		fmt.Println("worker", id, "started  job", j)
-		time.Sleep(time.Second)
-		fmt.Println("worker", id, "finished job", j)
-		results <- j * 2
-	}
+type Manager struct {
+	pattern pattern
 }
 
-func main() {
-	const numJobs = 5
-	jobs := make(chan int, numJobs)
-	results := make(chan int, numJobs)
+func (m Manager) ScheduleReadAllBalancesSum(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) (int64, error) {
+	balancesSum := int64(0)
 
-	for w := 1; w <= 3; w++ {
-		go worker(w, jobs, results)
+	err := m.pattern.start(balancesNum,
+		config.Data.MaxConcurrentGoroutines,
+		worker,
+		//result handler:
+		func(result int) {
+			atomic.AddInt64(&balancesSum, int64(result))
+		})
+	if err != nil {
+		logger.Zap().Error("failed to run read all balances concurrently", zap.Error(err))
+		return 0, err
 	}
 
-	for j := 1; j <= numJobs; j++ {
-		jobs <- j
-	}
-	close(jobs)
+	logger.Zap().Info("concurrency.manager done !")
+	return balancesSum, nil
+}
 
-	for a := 1; a <= numJobs; a++ {
-		<-results
+func (m Manager) ScheduleCreateBalances(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
+	panic("not implemented")
+}
+
+func (m Manager) ScheduleUpdateBalances(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
+	panic("not implemented")
+}
+
+func CreateManager() Manager {
+	return Manager{
+		pattern: createPoolingPattern(),
 	}
 }
