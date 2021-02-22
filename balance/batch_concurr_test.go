@@ -45,25 +45,27 @@ func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 }
 
 func TestConcurrentBatchCreateBalances(t *testing.T) {
-	test.ChangeNumberOfBalances(100)
-	test.RemoveAllTestFiles()
+	for i := 0; i < 100; i++ {
+		test.ChangeNumberOfBalances(1000)
+		test.RemoveAllTestFiles()
 
-	concurrBatchOpMng := concurrentBatchOperation()
+		concurrBatchOpMng := concurrentBatchOperation()
 
-	numberOfBalances := len(test.Balances)
+		numberOfBalances := len(test.Balances)
 
-	err := concurrBatchOpMng.createBalances(numberOfBalances)
-	if err != nil {
-		logger.Zap().Error("error on createBalances", zap.Error(err))
-	}
+		err := concurrBatchOpMng.createBalances(numberOfBalances)
+		if err != nil {
+			logger.Zap().Error("error on createBalances", zap.Error(err))
+		}
 
-	assert.Nil(t, err, "the method should return no error")
-	assert.Equal(t, numberOfBalances, test.NumberOfFiles(), "number of created files should match with the number of balances in the request")
+		assert.Nil(t, err, "the method should return no error")
+		assert.Equal(t, numberOfBalances, test.NumberOfFiles(), "number of created files should match with the number of balances in the request")
 
-	for id := 0; id < numberOfBalances; id++ {
-		actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
+		for id := 0; id < numberOfBalances; id++ {
+			actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
 
-		_, err := strconv.Atoi(actualBalanceAmountStr)
-		assert.Nil(t, err, "content of created files should be numeric")
+			_, err := strconv.Atoi(actualBalanceAmountStr)
+			assert.Nil(t, err, "content of created files should be numeric")
+		}
 	}
 }
