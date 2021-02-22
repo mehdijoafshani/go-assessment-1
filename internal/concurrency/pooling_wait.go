@@ -5,6 +5,11 @@ import (
 	"go.uber.org/zap"
 )
 
+// #SOLID: L
+// Liskov Substitution Principle is related to inheritance, while in Golang composition is used
+// Also embedding a struct into another one only copies the BEHAVIOR of a struct to another one, it does not mean the embedding struct is extending the embedded struct
+// There is no inheritance in Go. However, I can replace this start() method with any other possible implementation of concurrency.pattern interface
+// And it will not break, this is the closest definition of Liskov Principle I can present here.
 type poolingWaitForAll struct {
 }
 
