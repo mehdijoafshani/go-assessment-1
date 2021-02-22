@@ -11,15 +11,19 @@ import (
 	"testing"
 )
 
-func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
-	test.RewriteTestDataOnFilesByNumberOfBalances(1000)
-
+func concurrentBatchOperation() concurrentBatch {
 	storageMng := storage.CreateManager()
 	amountMng := amount.CreateAmountManager()
 	singleOpMng := createSingleOperationTask(storageMng, amountMng)
 	concurrencyMng := concurrency.CreateManager()
 
-	batchOpMng := createConcurrentBatch(storageMng, amountMng, concurrencyMng, singleOpMng)
+	return createConcurrentBatch(storageMng, amountMng, concurrencyMng, singleOpMng)
+}
+
+func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
+	test.RewriteTestDataOnFilesByNumberOfBalances(1000)
+
+	concurrBatchOpMng := concurrentBatchOperation()
 
 	numberOfBalances := len(test.Balances)
 	expectedSum := int64(0)
@@ -27,7 +31,7 @@ func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 		expectedSum += int64(test.Balances[i].Amount)
 	}
 
-	result, err := batchOpMng.getAllBalancesSum(numberOfBalances)
+	result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
 	if err != nil {
 		logger.Zap().Error("TestConcurrentBatchGetAllBalancesSum", zap.Error(err))
 	}
