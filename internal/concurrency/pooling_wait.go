@@ -26,11 +26,13 @@ func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids
 		logger.Zap().Info("pooling, job sent", zap.Int("job id", jobIndex))
 	}
 
+	var err error
+infiniteLoop:
 	for {
 		select {
-		case err := <-errorCh:
+		case err = <-errorCh:
 			logger.Zap().Info("pooling, error received", zap.Error(err))
-			break
+			break infiniteLoop
 		case result := <-results:
 			logger.Zap().Info("pooling, result received", zap.Int("result", result))
 			remainingJobs--
@@ -44,7 +46,7 @@ func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids
 	}
 	close(jobs)
 
-	return nil
+	return err
 }
 
 func createPoolingWaitForAllPattern() poolingWaitForAll {
