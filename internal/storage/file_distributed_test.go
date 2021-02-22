@@ -11,7 +11,7 @@ import (
 func TestFileDistributedGetInt(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	balance, err := file.getInt(test.Balances[0].Id)
 	assert.Nil(t, err, "getInt should return no error")
 
@@ -21,7 +21,7 @@ func TestFileDistributedGetInt(t *testing.T) {
 func TestFileDistributedGetIntInvalidId(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	_, err := file.getInt(len(test.Balances))
 	assert.Error(t, err, "getInt should return an error when the given id does not exist")
 }
@@ -29,7 +29,7 @@ func TestFileDistributedGetIntInvalidId(t *testing.T) {
 func TestFileDistributedGetIntNoFile(t *testing.T) {
 	test.RemoveAllTestFiles()
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	_, err := file.getInt(test.Balances[0].Id)
 	assert.Error(t, err, "getInt should return an error when there is no balance file")
 
@@ -41,7 +41,7 @@ func TestFileDistributedCreateInt(t *testing.T) {
 	id := test.Balances[0].Id
 	expectedAmount := test.Balances[0].Amount
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.createInt(id, expectedAmount)
 	assert.Nil(t, err, "should return no error")
 
@@ -56,7 +56,7 @@ func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
 	id := test.Balances[0].Id
 	expectedAmount := test.Balances[0].Amount
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.createInt(id, expectedAmount)
 	assert.Nil(t, err, "should return no error")
 
@@ -71,7 +71,7 @@ func TestFileDistributedUpdateInt(t *testing.T) {
 	id := test.Balances[0].Id
 	newAmount := test.Balances[0].Amount + 1000
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.updateInt(id, newAmount)
 	assert.Nil(t, err, "should return no error")
 
@@ -86,7 +86,7 @@ func TestFileDistributedUpdateIntMissingFile(t *testing.T) {
 	id := test.Balances[0].Id
 	newAmount := test.Balances[0].Amount + 1000
 
-	file := createDistributedFileStorage(config.Data.TestAccountsDir)
+	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.updateInt(id, newAmount)
 	assert.Error(t, err, "should return an error when the balance file is missing")
 }
