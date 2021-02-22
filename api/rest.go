@@ -10,8 +10,9 @@ import (
 	"strconv"
 )
 
-// #SOLID
+// #SOLID: S
 // If the number of APIs increases (ex. a new set of APIs to handle a new business area) it sounds reasonable to separate them into different files
+// To follow Single Responsibility Principle
 
 // #Desc
 // Maybe defining a separate struct, including the following manager var inside it and implement an interface would sound a good idea
