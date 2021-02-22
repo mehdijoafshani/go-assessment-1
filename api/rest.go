@@ -10,6 +10,12 @@ import (
 	"strconv"
 )
 
+// #SOLID
+// If the number of APIs increases (ex. a new set of APIs to handle a new business area) it sounds reasonable to separate them into different files
+
+// #Desc
+// Maybe defining a separate struct, including the following manager var inside it and implement an interface would sound a good idea
+// However, each API (REST, gRPC, ...) would need a separate set of arguments in their methods, I decided to keep it as it is.
 var manager balanceManager
 
 func create(c *gin.Context) {
