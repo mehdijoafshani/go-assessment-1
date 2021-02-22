@@ -8,6 +8,7 @@ import (
 	"github.com/mehdijoafshani/go-assessment-1/test"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
+	"strconv"
 	"testing"
 )
 
@@ -21,7 +22,8 @@ func concurrentBatchOperation() concurrentBatch {
 }
 
 func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
-	test.RewriteTestDataOnFilesByNumberOfBalances(1000)
+	test.ChangeNumberOfBalances(1000)
+	test.RewriteTestDataOnFiles()
 
 	concurrBatchOpMng := concurrentBatchOperation()
 
@@ -33,9 +35,35 @@ func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 
 	result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
 	if err != nil {
-		logger.Zap().Error("TestConcurrentBatchGetAllBalancesSum", zap.Error(err))
+		logger.Zap().Error("error on getAllBalancesSum", zap.Error(err))
 	}
 
 	assert.Nil(t, err, "the method should return no error")
 	assert.Equal(t, expectedSum, result, "the calculated sum of files should match the actual one")
+}
+
+func TestConcurrentBatchCreateBalances(t *testing.T) {
+	test.ChangeNumberOfBalances(10000)
+	test.RemoveAllTestFiles()
+
+	concurrBatchOpMng := concurrentBatchOperation()
+
+	numberOfBalances := len(test.Balances)
+
+	err := concurrBatchOpMng.createBalances(numberOfBalances)
+	if err != nil {
+		logger.Zap().Error("error on createBalances", zap.Error(err))
+	}
+
+	assert.Nil(t, err, "the method should return no error")
+	assert.Equal(t, numberOfBalances, test.NumberOfFiles(), "number of created files should match with the number of balances in the request")
+
+	for id := 0; id < numberOfBalances; id++ {
+		actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
+		expectedBalanceAmount := test.Balances[id].Amount
+
+		actualBalanceAmount, err := strconv.Atoi(actualBalanceAmountStr)
+		assert.Nil(t, err, "content of created files should be numeric")
+		assert.Equal(t, expectedBalanceAmount, actualBalanceAmount, "content of created files should match with the amount of the same balance")
+	}
 }

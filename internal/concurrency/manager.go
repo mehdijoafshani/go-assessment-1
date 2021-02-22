@@ -26,12 +26,24 @@ func (m Manager) ScheduleReadAllBalancesSum(balancesNum int, worker func(ids <-c
 		return 0, err
 	}
 
-	logger.Zap().Info("concurrency.manager done !")
+	logger.Zap().Info("concurrency.manager read all done !")
 	return balancesSum, nil
 }
 
 func (m Manager) ScheduleCreateBalances(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
-	panic("not implemented")
+	err := m.pattern.start(balancesNum,
+		config.Data.MaxConcurrentGoroutines,
+		worker,
+		func(result int) {
+			// the result is only a simple signal here
+		})
+	if err != nil {
+		logger.Zap().Error("failed to run create balances concurrently", zap.Error(err))
+		return err
+	}
+
+	logger.Zap().Info("concurrency.manager create done !")
+	return nil
 }
 
 func (m Manager) ScheduleUpdateBalances(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
@@ -40,6 +52,6 @@ func (m Manager) ScheduleUpdateBalances(balancesNum int, worker func(ids <-chan 
 
 func CreateManager() Manager {
 	return Manager{
-		pattern: createPoolingPattern(),
+		pattern: createPoolingWaitForAllPattern(),
 	}
 }
