@@ -34,6 +34,7 @@ func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids
 		case result := <-results:
 			logger.Zap().Info("pooling, result received", zap.Int("result", result))
 			remainingJobs--
+			// TODO possible alternative: include resultHandler in worker and use waitGroup here
 			resultHandler(result)
 		}
 
