@@ -11,21 +11,21 @@ type Manager struct {
 	file file
 }
 
-func (m Manager) AreBalancesCreated() (bool, error) {
+func (m Manager) AreAccountsCreated() (bool, error) {
 	isEmpty, err := m.file.isDirEmpty()
 	if err != nil {
-		logger.Zap().Error("failed to check if any balance is created in the storage", zap.Error(err))
+		logger.Zap().Error("failed to check if any account is created in the storage", zap.Error(err))
 		return false, err
 	}
 
-	areBalancesCreated := !isEmpty
-	return areBalancesCreated, nil
+	areAccountsCreated := !isEmpty
+	return areAccountsCreated, nil
 }
 
-func (m Manager) CreateBalance(id int, amount int) error {
-	err := m.file.createInt(id, amount)
+func (m Manager) CreateAccount(id int, balance int) error {
+	err := m.file.createInt(id, balance)
 	if err != nil {
-		logger.Zap().Error("failed to create balance in file", zap.Error(err))
+		logger.Zap().Error("failed to create account in the storage", zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
@@ -35,21 +35,21 @@ func (m Manager) CreateBalance(id int, amount int) error {
 func (m Manager) GetBalance(id int) (int, error) {
 	balance, err := m.file.getInt(id)
 	if err != nil {
-		logger.Zap().Error("failed to get balance from file", zap.Error(err), zap.Int("id", id))
+		logger.Zap().Error("failed to get balance from the storage", zap.Error(err), zap.Int("id", id))
 		return 0, err
 	}
 
 	return balance, nil
 }
 
-func (m Manager) IncreaseBalance(id int, newContent int) error {
+func (m Manager) IncreaseBalance(id int, newBalance int) error {
 	balance, err := m.GetBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to get balance from file to update", zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
-	err = m.file.updateInt(id, newContent+balance)
+	err = m.file.updateInt(id, newBalance+balance)
 	if err != nil {
 		logger.Zap().Error("failed to update balance in file", zap.Error(err), zap.Int("id", id))
 		return err
@@ -68,10 +68,10 @@ func (m Manager) Truncate() error {
 	return nil
 }
 
-func (m Manager) NumberOfBalances() (int, error) {
-	numbers, err := m.file.dirFilesNumber(config.Data.BalanceFileExtension)
+func (m Manager) NumberOfAccounts() (int, error) {
+	numbers, err := m.file.dirFilesNumber(config.Data.AccountFileExtension)
 	if err != nil {
-		logger.Zap().Error("failed to get the number of balances in storage", zap.Error(err))
+		logger.Zap().Error("failed to get the number of accounts in the storage", zap.Error(err))
 		return 0, err
 	}
 

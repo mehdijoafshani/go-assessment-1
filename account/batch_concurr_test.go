@@ -20,16 +20,16 @@ func concurrentBatchOperation() concurrentBatch {
 }
 
 func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
-	test.ChangeNumberOfBalances(1000)
+	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Balances)
+	numberOfBalances := len(test.Accounts)
 
 	for i := 0; i < 100; i++ {
 		test.RewriteTestDataOnFiles()
 
 		expectedSum := int64(0)
 		for i := 0; i < numberOfBalances; i++ {
-			expectedSum += int64(test.Balances[i].Amount)
+			expectedSum += int64(test.Accounts[i].Balance)
 		}
 
 		result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
@@ -39,9 +39,9 @@ func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 }
 
 func TestConcurrentBatchCreateBalances(t *testing.T) {
-	test.ChangeNumberOfBalances(1000)
+	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Balances)
+	numberOfBalances := len(test.Accounts)
 
 	for i := 0; i < 100; i++ {
 		test.RemoveAllTestFiles()
@@ -60,9 +60,9 @@ func TestConcurrentBatchCreateBalances(t *testing.T) {
 }
 
 func TestConcurrentBatchAddToAllBalances(t *testing.T) {
-	test.ChangeNumberOfBalances(1000)
+	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Balances)
+	numberOfBalances := len(test.Accounts)
 	increment := 1000
 
 	for i := 0; i < 100; i++ {
@@ -73,7 +73,7 @@ func TestConcurrentBatchAddToAllBalances(t *testing.T) {
 
 		for id := 0; id < numberOfBalances; id++ {
 			actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
-			expectedBalanceAmount := test.Balances[id].Amount + increment
+			expectedBalanceAmount := test.Accounts[id].Balance + increment
 
 			actualBalanceAmount, err := strconv.Atoi(actualBalanceAmountStr)
 			assert.Nil(t, err, "content of created files should be numeric")

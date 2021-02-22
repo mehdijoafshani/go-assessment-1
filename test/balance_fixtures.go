@@ -4,33 +4,33 @@ import (
 	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
 )
 
-type Balance struct {
-	Id     int
-	Amount int
+type Account struct {
+	Id      int
+	Balance int
 }
 
 // assumptions:
-//	- id of a balance equals to its index in Balances slice
-var Balances []Balance
+//	- id of a balance equals to its index in Accounts slice
+var Accounts []Account
 
 func init() {
-	Balances = []Balance{
-		{Id: 0, Amount: 12_000},
-		{Id: 1, Amount: 15_000},
-		{Id: 2, Amount: 1_000},
+	Accounts = []Account{
+		{Id: 0, Balance: 12_000},
+		{Id: 1, Balance: 15_000},
+		{Id: 2, Balance: 1_000},
 	}
 }
 
-func ChangeNumberOfBalances(balances int) {
-	Balances = make([]Balance, 0, balances)
-	for i := 0; i < balances; i++ {
-		balanceAmount, err := amount.CreateAmountManager().GenerateBalanceAmount(i)
+func ChangeNumberOfAccounts(accounts int) {
+	Accounts = make([]Account, 0, accounts)
+	for i := 0; i < accounts; i++ {
+		balance, err := amount.CreateAmountManager().GenerateBalance(i)
 		if err != nil {
 			panic("failed to generate test data, failed to generate amount")
 		}
-		Balances = append(Balances, Balance{
-			Id:     i,
-			Amount: balanceAmount,
+		Accounts = append(Accounts, Account{
+			Id:      i,
+			Balance: balance,
 		})
 	}
 }

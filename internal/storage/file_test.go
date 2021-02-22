@@ -9,20 +9,20 @@ import (
 func TestFileName(t *testing.T) {
 	dir := "/some/path"
 	id := 0
-	expectedFileName := "/some/path/0" + config.Data.BalanceFileExtension
+	expectedFileName := "/some/path/0" + config.Data.AccountFileExtension
 	actualFileName := fileName(dir, id)
-	assert.Equal(t, expectedFileName, actualFileName, "/some/path", "0", config.Data.BalanceFileExtension)
+	assert.Equal(t, expectedFileName, actualFileName, "/some/path", "0", config.Data.AccountFileExtension)
 
 	dir = "/some/path/"
 	id = 0
-	expectedFileName = "/some/path/0" + config.Data.BalanceFileExtension
+	expectedFileName = "/some/path/0" + config.Data.AccountFileExtension
 	actualFileName = fileName(dir, id)
-	assert.Equal(t, expectedFileName, actualFileName, "/some/path/", "0", config.Data.BalanceFileExtension)
+	assert.Equal(t, expectedFileName, actualFileName, "/some/path/", "0", config.Data.AccountFileExtension)
 
 	dir = "/some/path///"
 	id = 0
-	expectedFileName = "/some/path/0" + config.Data.BalanceFileExtension
+	expectedFileName = "/some/path/0" + config.Data.AccountFileExtension
 	actualFileName = fileName(dir, id)
-	assert.Equal(t, expectedFileName, actualFileName, "/some/path///", "0", config.Data.BalanceFileExtension)
+	assert.Equal(t, expectedFileName, actualFileName, "/some/path///", "0", config.Data.AccountFileExtension)
 
 }

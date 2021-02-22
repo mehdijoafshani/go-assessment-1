@@ -16,5 +16,5 @@ type file interface {
 }
 
 func fileName(dir string, id int) string {
-	return filepath.Join(dir, strconv.Itoa(id)+config.Data.BalanceFileExtension)
+	return filepath.Join(dir, strconv.Itoa(id)+config.Data.AccountFileExtension)
 }

@@ -17,7 +17,7 @@ type Manager struct {
 
 func (m Manager) Create(accountsNum int) error {
 	// rule: balances should be created only once
-	areBalancesCreated, err := m.storageMng.AreBalancesCreated()
+	areBalancesCreated, err := m.storageMng.AreAccountsCreated()
 	if err != nil {
 		logger.Zap().Error("failed to check if balances are created before", zap.Error(err))
 
@@ -48,7 +48,7 @@ func (m Manager) Create(accountsNum int) error {
 }
 
 func (m Manager) GetAll() (int64, error) {
-	numberOfBalances, err := m.storageMng.NumberOfBalances()
+	numberOfBalances, err := m.storageMng.NumberOfAccounts()
 	if err != nil {
 		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return 0, err
@@ -74,7 +74,7 @@ func (m Manager) Get(id int) (int, error) {
 }
 
 func (m Manager) AddToAll(increment int) error {
-	numberOfBalances, err := m.storageMng.NumberOfBalances()
+	numberOfBalances, err := m.storageMng.NumberOfAccounts()
 	if err != nil {
 		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return err

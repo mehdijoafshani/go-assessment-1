@@ -12,17 +12,17 @@ func TestFileDistributedGetInt(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
-	balance, err := file.getInt(test.Balances[0].Id)
+	balance, err := file.getInt(test.Accounts[0].Id)
 	assert.Nil(t, err, "getInt should return no error")
 
-	assert.Equal(t, test.Balances[0].Amount, balance, "returned balance should match the test data")
+	assert.Equal(t, test.Accounts[0].Balance, balance, "returned balance should match the test data")
 }
 
 func TestFileDistributedGetIntInvalidId(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
-	_, err := file.getInt(len(test.Balances))
+	_, err := file.getInt(len(test.Accounts))
 	assert.Error(t, err, "getInt should return an error when the given id does not exist")
 }
 
@@ -30,7 +30,7 @@ func TestFileDistributedGetIntNoFile(t *testing.T) {
 	test.RemoveAllTestFiles()
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
-	_, err := file.getInt(test.Balances[0].Id)
+	_, err := file.getInt(test.Accounts[0].Id)
 	assert.Error(t, err, "getInt should return an error when there is no balance file")
 
 }
@@ -38,8 +38,8 @@ func TestFileDistributedGetIntNoFile(t *testing.T) {
 func TestFileDistributedCreateInt(t *testing.T) {
 	test.RemoveAllTestFiles()
 
-	id := test.Balances[0].Id
-	expectedAmount := test.Balances[0].Amount
+	id := test.Accounts[0].Id
+	expectedAmount := test.Accounts[0].Balance
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.createInt(id, expectedAmount)
@@ -53,8 +53,8 @@ func TestFileDistributedCreateInt(t *testing.T) {
 func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
-	id := test.Balances[0].Id
-	expectedAmount := test.Balances[0].Amount
+	id := test.Accounts[0].Id
+	expectedAmount := test.Accounts[0].Balance
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.createInt(id, expectedAmount)
@@ -68,8 +68,8 @@ func TestFileDistributedCreateIntOnExistingFile(t *testing.T) {
 func TestFileDistributedUpdateInt(t *testing.T) {
 	test.RewriteTestDataOnFiles()
 
-	id := test.Balances[0].Id
-	newAmount := test.Balances[0].Amount + 1000
+	id := test.Accounts[0].Id
+	newAmount := test.Accounts[0].Balance + 1000
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.updateInt(id, newAmount)
@@ -83,8 +83,8 @@ func TestFileDistributedUpdateInt(t *testing.T) {
 func TestFileDistributedUpdateIntMissingFile(t *testing.T) {
 	test.RemoveAllTestFiles()
 
-	id := test.Balances[0].Id
-	newAmount := test.Balances[0].Amount + 1000
+	id := test.Accounts[0].Id
+	newAmount := test.Accounts[0].Balance + 1000
 
 	file := createDistributedFileStorage(config.Data.AccountsDir)
 	err := file.updateInt(id, newAmount)

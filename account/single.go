@@ -22,13 +22,13 @@ type singleOperationImpl struct {
 }
 
 func (s singleOperationImpl) createBalance(id int) error {
-	amount, err := s.amountMng.GenerateBalanceAmount(id)
+	amount, err := s.amountMng.GenerateBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to generate balance amount", zap.Int("id", id), zap.Error(err))
 		return err
 	}
 
-	err = s.storageMng.CreateBalance(id, amount)
+	err = s.storageMng.CreateAccount(id, amount)
 	if err != nil {
 		logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
 		return err

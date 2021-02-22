@@ -49,7 +49,7 @@ func NumberOfFiles() int {
 		panic("failed to read testdata files")
 	}
 	for _, name := range names {
-		if strings.HasSuffix(name, config.Data.BalanceFileExtension) {
+		if strings.HasSuffix(name, config.Data.AccountFileExtension) {
 			numberOfFiles++
 		}
 	}
@@ -59,7 +59,7 @@ func NumberOfFiles() int {
 
 func ReadTestDataContentFromTestFile(id int) string {
 	dir := config.Data.AccountsDir
-	fileName := strconv.Itoa(id) + config.Data.BalanceFileExtension
+	fileName := strconv.Itoa(id) + config.Data.AccountFileExtension
 
 	data, err := ioutil.ReadFile(filepath.Join(dir, fileName))
 	if err != nil {
@@ -73,10 +73,10 @@ func RewriteTestDataOnFiles() {
 	RemoveAllTestFiles()
 	dir := config.Data.AccountsDir
 
-	for _, b := range Balances {
-		data := strconv.Itoa(b.Amount)
+	for _, acc := range Accounts {
+		data := strconv.Itoa(acc.Balance)
 
-		f, err := os.Create(filepath.Join(dir, strconv.Itoa(b.Id)+config.Data.BalanceFileExtension))
+		f, err := os.Create(filepath.Join(dir, strconv.Itoa(acc.Id)+config.Data.AccountFileExtension))
 		if err != nil {
 			panic("failed to create test data")
 		}

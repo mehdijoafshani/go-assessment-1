@@ -8,5 +8,5 @@
   "randomBalanceMinRange": 1000,
   "randomBalanceMaxRange": 100000,
   "maxConcurrentGoroutines": 10,
-  "balanceFileExtension": ".txt"
+  "accountFileExtension": ".txt"
 }

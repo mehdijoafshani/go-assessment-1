@@ -1,10 +1,10 @@
 package account
 
 type StorageManager interface {
-	AreBalancesCreated() (bool, error)
-	CreateBalance(id int, amount int) error
+	AreAccountsCreated() (bool, error)
+	CreateAccount(id int, amount int) error
 	GetBalance(id int) (int, error)
-	IncreaseBalance(id int, newContent int) error
+	IncreaseBalance(id int, newBalance int) error
 	Truncate() error
-	NumberOfBalances() (int, error)
+	NumberOfAccounts() (int, error)
 }

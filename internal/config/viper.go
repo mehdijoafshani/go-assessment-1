@@ -15,7 +15,7 @@ type data struct {
 	RandomBalanceMinRange   int    `json:"randomBalanceMinRange"`
 	RandomBalanceMaxRange   int    `json:"randomBalanceMaxRange"`
 	RestPort                string `json:"restPort"`
-	BalanceFileExtension    string `json:"balanceFileExtension"`
+	AccountFileExtension    string `json:"accountFileExtension"`
 	MaxConcurrentGoroutines int    `json:"maxConcurrentGoroutines"`
 }
 
