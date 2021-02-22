@@ -11,10 +11,10 @@ type serialBatch struct {
 	singleOperation singleOperationManager
 }
 
-func (sb serialBatch) createBalances(accountsNum int) error {
+func (sb serialBatch) createAccounts(accountsNum int) error {
 	for i := 0; i < accountsNum; i++ {
 		id := i
-		err := sb.singleOperation.createBalance(id)
+		err := sb.singleOperation.createAccount(id)
 		if err != nil {
 			logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
 			return err
@@ -24,10 +24,10 @@ func (sb serialBatch) createBalances(accountsNum int) error {
 	return nil
 }
 
-func (sb serialBatch) getAllBalancesSum(numberOfBalances int) (int64, error) {
+func (sb serialBatch) getAllBalancesSum(numberOfAccounts int) (int64, error) {
 	totalBalance := int64(0)
 
-	for i := 0; i < numberOfBalances; i++ {
+	for i := 0; i < numberOfAccounts; i++ {
 		id := i
 
 		balance, err := sb.singleOperation.getBalance(id)
@@ -42,8 +42,8 @@ func (sb serialBatch) getAllBalancesSum(numberOfBalances int) (int64, error) {
 	return totalBalance, nil
 }
 
-func (sb serialBatch) addToAllBalances(numberOfBalances int, increment int) error {
-	for i := 0; i < numberOfBalances; i++ {
+func (sb serialBatch) addToAllBalances(numberOfAccounts int, increment int) error {
+	for i := 0; i < numberOfAccounts; i++ {
 		id := i
 
 		err := sb.singleOperation.addBalance(id, increment)

@@ -46,8 +46,8 @@ func (m Manager) ScheduleCreateBalances(balancesNum int, worker func(ids <-chan 
 	return nil
 }
 
-func (m Manager) ScheduleUpdateBalances(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
-	err := m.pattern.start(balancesNum,
+func (m Manager) ScheduleUpdateBalances(AccountsNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) error {
+	err := m.pattern.start(AccountsNum,
 		config.Data.MaxConcurrentGoroutines,
 		worker,
 		func(result int) {

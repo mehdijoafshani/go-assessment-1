@@ -27,7 +27,7 @@ func (m Manager) Create(accountsNum int) error {
 		return errors.New("balances are created before, it is allowed to be created only once")
 	}
 
-	err = m.batchOpMng.createBalances(accountsNum)
+	err = m.batchOpMng.createAccounts(accountsNum)
 	if err != nil {
 		logger.Zap().Error("failed to create accounts in batchOperationManager", zap.Error(err))
 	}
@@ -48,13 +48,13 @@ func (m Manager) Create(accountsNum int) error {
 }
 
 func (m Manager) GetAll() (int64, error) {
-	numberOfBalances, err := m.storageMng.NumberOfAccounts()
+	numberOfAccounts, err := m.storageMng.NumberOfAccounts()
 	if err != nil {
 		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return 0, err
 	}
 
-	balance, err := m.batchOpMng.getAllBalancesSum(numberOfBalances)
+	balance, err := m.batchOpMng.getAllBalancesSum(numberOfAccounts)
 	if err != nil {
 		logger.Zap().Error("failed to getBalance all balances in batchOperationManager", zap.Error(err))
 		return 0, err
@@ -74,13 +74,13 @@ func (m Manager) Get(id int) (int, error) {
 }
 
 func (m Manager) AddToAll(increment int) error {
-	numberOfBalances, err := m.storageMng.NumberOfAccounts()
+	numberOfAccounts, err := m.storageMng.NumberOfAccounts()
 	if err != nil {
 		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return err
 	}
 
-	err = m.batchOpMng.addToAllBalances(numberOfBalances, increment)
+	err = m.batchOpMng.addToAllBalances(numberOfAccounts, increment)
 	if err != nil {
 		logger.Zap().Error("failed to addBalance extra balance to all accounts", zap.Error(err))
 		// TODO (IMPORTANT): rollback made changes !

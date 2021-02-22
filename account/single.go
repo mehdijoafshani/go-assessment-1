@@ -11,7 +11,7 @@ import (
 // This means that Interface Segregation principle has been satisfied
 
 type singleOperationManager interface {
-	createBalance(id int) error
+	createAccount(id int) error
 	getBalance(id int) (int, error)
 	addBalance(id int, increment int) error
 }
@@ -21,7 +21,7 @@ type singleOperationImpl struct {
 	amountMng  AmountManager
 }
 
-func (s singleOperationImpl) createBalance(id int) error {
+func (s singleOperationImpl) createAccount(id int) error {
 	amount, err := s.amountMng.GenerateBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to generate balance amount", zap.Int("id", id), zap.Error(err))

@@ -22,17 +22,17 @@ func concurrentBatchOperation() concurrentBatch {
 func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Accounts)
+	numberOfAccounts := len(test.Accounts)
 
 	for i := 0; i < 100; i++ {
 		test.RewriteTestDataOnFiles()
 
 		expectedSum := int64(0)
-		for i := 0; i < numberOfBalances; i++ {
+		for i := 0; i < numberOfAccounts; i++ {
 			expectedSum += int64(test.Accounts[i].Balance)
 		}
 
-		result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
+		result, err := concurrBatchOpMng.getAllBalancesSum(numberOfAccounts)
 		assert.Nil(t, err, "the method should return no error")
 		assert.Equal(t, expectedSum, result, "the calculated sum of files should match the actual one")
 	}
@@ -41,16 +41,16 @@ func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
 func TestConcurrentBatchCreateBalances(t *testing.T) {
 	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Accounts)
+	numberOfAccounts := len(test.Accounts)
 
 	for i := 0; i < 100; i++ {
 		test.RemoveAllTestFiles()
 
-		err := concurrBatchOpMng.createBalances(numberOfBalances)
+		err := concurrBatchOpMng.createAccounts(numberOfAccounts)
 		assert.Nil(t, err, "the method should return no error")
-		assert.Equal(t, numberOfBalances, test.NumberOfFiles(), "number of created files should match with the number of balances in the request")
+		assert.Equal(t, numberOfAccounts, test.NumberOfFiles(), "number of created files should match with the number of balances in the request")
 
-		for id := 0; id < numberOfBalances; id++ {
+		for id := 0; id < numberOfAccounts; id++ {
 			actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
 
 			_, err := strconv.Atoi(actualBalanceAmountStr)
@@ -62,16 +62,16 @@ func TestConcurrentBatchCreateBalances(t *testing.T) {
 func TestConcurrentBatchAddToAllBalances(t *testing.T) {
 	test.ChangeNumberOfAccounts(1000)
 	concurrBatchOpMng := concurrentBatchOperation()
-	numberOfBalances := len(test.Accounts)
+	numberOfAccounts := len(test.Accounts)
 	increment := 1000
 
 	for i := 0; i < 100; i++ {
 		test.RewriteTestDataOnFiles()
 
-		err := concurrBatchOpMng.addToAllBalances(numberOfBalances, increment)
+		err := concurrBatchOpMng.addToAllBalances(numberOfAccounts, increment)
 		assert.Nil(t, err, "the method should return no error")
 
-		for id := 0; id < numberOfBalances; id++ {
+		for id := 0; id < numberOfAccounts; id++ {
 			actualBalanceAmountStr := test.ReadTestDataContentFromTestFile(id)
 			expectedBalanceAmount := test.Accounts[id].Balance + increment
 
