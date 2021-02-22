@@ -7,6 +7,6 @@
   "defaultAccountNumbers": 100,
   "randomBalanceMinRange": 1000,
   "randomBalanceMaxRange": 100000,
-  "maxConcurrentGoroutines": 1,
+  "maxConcurrentGoroutines": 10,
   "balanceFileExtension": ".txt"
 }
