@@ -16,6 +16,7 @@ The project should include a config file, which stores the directory of these fi
 - Comment
   - Search for #SOLID to see the examples of applied SOLID principles
   - Search for #TODO to see the possible improvements which I could not implement in the specified time period
+  - Search for #Desc to see my reasons for making some specific decisions
   
 
 #### TODO
