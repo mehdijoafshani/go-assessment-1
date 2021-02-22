@@ -34,6 +34,8 @@ func SetupZap() {
 	})
 }
 
+//TODO replace Zap() function with a more general one.
+// It needs some abstraction over zap tags
 func Zap() *zap.Logger {
 	return zapLogger
 }
