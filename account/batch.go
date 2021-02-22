@@ -1,4 +1,4 @@
-package balance
+package account
 
 // #SOLID: O
 // Instead of relying on a concrete struct and implement createBalances, ... methods, an interface has been defined

@@ -1,4 +1,4 @@
-package balance
+package account
 
 type ConcurrencyManager interface {
 	ScheduleReadAllBalancesSum(balancesNum int, worker func(ids <-chan int, results chan<- int, error chan<- error)) (int64, error)

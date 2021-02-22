@@ -1,4 +1,4 @@
-package balance
+package account
 
 type StorageManager interface {
 	AreBalancesCreated() (bool, error)
