@@ -22,24 +22,26 @@ func concurrentBatchOperation() concurrentBatch {
 }
 
 func TestConcurrentBatchGetAllBalancesSum(t *testing.T) {
-	test.ChangeNumberOfBalances(1000)
-	test.RewriteTestDataOnFiles()
+	for i := 0; i < 100; i++ {
+		test.ChangeNumberOfBalances(1000)
+		test.RewriteTestDataOnFiles()
 
-	concurrBatchOpMng := concurrentBatchOperation()
+		concurrBatchOpMng := concurrentBatchOperation()
 
-	numberOfBalances := len(test.Balances)
-	expectedSum := int64(0)
-	for i := 0; i < numberOfBalances; i++ {
-		expectedSum += int64(test.Balances[i].Amount)
+		numberOfBalances := len(test.Balances)
+		expectedSum := int64(0)
+		for i := 0; i < numberOfBalances; i++ {
+			expectedSum += int64(test.Balances[i].Amount)
+		}
+
+		result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
+		if err != nil {
+			logger.Zap().Error("error on getAllBalancesSum", zap.Error(err))
+		}
+
+		assert.Nil(t, err, "the method should return no error")
+		assert.Equal(t, expectedSum, result, "the calculated sum of files should match the actual one")
 	}
-
-	result, err := concurrBatchOpMng.getAllBalancesSum(numberOfBalances)
-	if err != nil {
-		logger.Zap().Error("error on getAllBalancesSum", zap.Error(err))
-	}
-
-	assert.Nil(t, err, "the method should return no error")
-	assert.Equal(t, expectedSum, result, "the calculated sum of files should match the actual one")
 }
 
 func TestConcurrentBatchCreateBalances(t *testing.T) {
