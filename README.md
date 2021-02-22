@@ -18,7 +18,6 @@ The project should include a config file, which stores the directory of these fi
   - Search for #TODO to see the possible improvements which I could not implement in the specified time period
   - Search for #Desc to see my reasons for making some specific decisions
   
-
 #### TODO
 - Implement delete
 - Define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error codes
@@ -26,3 +25,4 @@ The project should include a config file, which stores the directory of these fi
 - Enhance project terminology
 - Rollback changes when batch update is failed
 - Wrap zap(logger) over an interface
+- Put data validation on config
