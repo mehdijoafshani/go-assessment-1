@@ -11,8 +11,8 @@ import (
 
 type Manager struct {
 	batchOpMng  batchOperationManager
-	storageMng  StorageManager
 	singleOpMng singleOperationManager
+	storageMng  StorageManager
 }
 
 func (m Manager) Create(accountsNum int) error {
