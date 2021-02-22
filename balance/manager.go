@@ -9,7 +9,7 @@ import (
 )
 
 type Manager struct {
-	batch       batchOperationManager
+	batchOpMng  batchOperationManager
 	storageMng  StorageManager
 	singleOpMng singleOperationManager
 }
@@ -26,7 +26,7 @@ func (m Manager) Create(accountsNum int) error {
 		return errors.New("balances are created before, it is allowed to be created only once")
 	}
 
-	err = m.batch.createBalances(accountsNum)
+	err = m.batchOpMng.createBalances(accountsNum)
 	if err != nil {
 		logger.Zap().Error("failed to create accounts in batchOperationManager", zap.Error(err))
 	}
@@ -53,7 +53,7 @@ func (m Manager) GetAll() (int64, error) {
 		return 0, err
 	}
 
-	balance, err := m.batch.getAllBalancesSum(numberOfBalances)
+	balance, err := m.batchOpMng.getAllBalancesSum(numberOfBalances)
 	if err != nil {
 		logger.Zap().Error("failed to getBalance all balances in batchOperationManager", zap.Error(err))
 		return 0, err
@@ -79,7 +79,7 @@ func (m Manager) AddToAll(increment int) error {
 		return err
 	}
 
-	err = m.batch.addToAllBalances(numberOfBalances, increment)
+	err = m.batchOpMng.addToAllBalances(numberOfBalances, increment)
 	if err != nil {
 		logger.Zap().Error("failed to addBalance extra balance to all accounts", zap.Error(err))
 		// TODO (IMPORTANT): rollback made changes !
@@ -112,9 +112,9 @@ func CreateManager(isConcurrent bool) Manager {
 	}
 
 	if isConcurrent {
-		mng.batch = createConcurrentBatch(storageMng, amountMng, concurrencyMng, singleOpMng)
+		mng.batchOpMng = createConcurrentBatch(storageMng, amountMng, concurrencyMng, singleOpMng)
 	} else {
-		mng.batch = createSerialBatch(storageMng, amountMng, singleOpMng)
+		mng.batchOpMng = createSerialBatch(storageMng, amountMng, singleOpMng)
 	}
 
 	return mng
