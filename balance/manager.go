@@ -9,7 +9,7 @@ import (
 )
 
 type Manager struct {
-	batch       batch
+	batch       batchOperationManager
 	storageMng  StorageManager
 	singleOpMng singleOperationManager
 }
@@ -26,9 +26,9 @@ func (m Manager) Create(accountsNum int) error {
 		return errors.New("balances are created before, it is allowed to be created only once")
 	}
 
-	err = m.batch.create(accountsNum)
+	err = m.batch.createBalances(accountsNum)
 	if err != nil {
-		logger.Zap().Error("failed to create accounts in batch", zap.Error(err))
+		logger.Zap().Error("failed to create accounts in batchOperationManager", zap.Error(err))
 	}
 
 	// define truncErr to avoid hierarchical code
@@ -49,13 +49,13 @@ func (m Manager) Create(accountsNum int) error {
 func (m Manager) GetAll() (int64, error) {
 	numberOfBalances, err := m.storageMng.NumberOfBalances()
 	if err != nil {
-		logger.Zap().Error("failed to get the number of balances", zap.Error(err))
+		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return 0, err
 	}
 
-	balance, err := m.batch.getAll(numberOfBalances)
+	balance, err := m.batch.getAllBalancesSum(numberOfBalances)
 	if err != nil {
-		logger.Zap().Error("failed to get all balances in batch", zap.Error(err))
+		logger.Zap().Error("failed to getBalance all balances in batchOperationManager", zap.Error(err))
 		return 0, err
 	}
 
@@ -63,7 +63,7 @@ func (m Manager) GetAll() (int64, error) {
 }
 
 func (m Manager) Get(id int) (int, error) {
-	balance, err := m.singleOpMng.get(id)
+	balance, err := m.singleOpMng.getBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to read the balance from the storageMng", zap.Error(err))
 		return 0, err
@@ -75,13 +75,13 @@ func (m Manager) Get(id int) (int, error) {
 func (m Manager) AddToAll(increment int) error {
 	numberOfBalances, err := m.storageMng.NumberOfBalances()
 	if err != nil {
-		logger.Zap().Error("failed to get the number of balances", zap.Error(err))
+		logger.Zap().Error("failed to getBalance the number of balances", zap.Error(err))
 		return err
 	}
 
-	err = m.batch.addToAll(numberOfBalances, increment)
+	err = m.batch.addToAllBalances(numberOfBalances, increment)
 	if err != nil {
-		logger.Zap().Error("failed to add extra balance to all accounts", zap.Error(err))
+		logger.Zap().Error("failed to addBalance extra balance to all accounts", zap.Error(err))
 		// TODO (IMPORTANT): rollback made changes !
 		return err
 	}
@@ -91,7 +91,7 @@ func (m Manager) AddToAll(increment int) error {
 
 func (m Manager) Add(increment int, id int) error {
 	// TODO: is zero balance allowed (negative increment)?
-	err := m.singleOpMng.add(id, increment)
+	err := m.singleOpMng.addBalance(id, increment)
 	if err != nil {
 		logger.Zap().Error("failed to update the balance in the storageMng", zap.Error(err))
 		return err

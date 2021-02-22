@@ -12,10 +12,10 @@ type concurrentBatch struct {
 	singleOpMng    singleOperationManager
 }
 
-func (cb concurrentBatch) create(accountsNum int) error {
+func (cb concurrentBatch) createBalances(accountsNum int) error {
 	err := cb.concurrencyMng.ScheduleCreateBalances(accountsNum, func(ids <-chan int, errors chan<- error) {
 		for id := range ids {
-			err := cb.singleOpMng.create(id)
+			err := cb.singleOpMng.createBalance(id)
 			if err != nil {
 				logger.Zap().Error("failed to create balance", zap.Int("id", id), zap.Error(err))
 			}
@@ -31,27 +31,27 @@ func (cb concurrentBatch) create(accountsNum int) error {
 	return nil
 }
 
-func (cb concurrentBatch) getAll(numberOfBalances int) (int64, error) {
+func (cb concurrentBatch) getAllBalancesSum(numberOfBalances int) (int64, error) {
 	sum, err := cb.concurrencyMng.ScheduleReadAllBalancesSum(numberOfBalances, func(ids <-chan int, results chan<- int, errors chan<- error) {
 		for id := range ids {
-			balance, err := cb.singleOpMng.get(id)
+			balance, err := cb.singleOpMng.getBalance(id)
 			errors <- err
 			results <- balance
 		}
 	})
 
 	if err != nil {
-		logger.Zap().Error("failed to get sum of all balances", zap.Error(err))
+		logger.Zap().Error("failed to getBalance sum of all balances", zap.Error(err))
 		return 0, err
 	}
 
 	return sum, nil
 }
 
-func (cb concurrentBatch) addToAll(numberOfBalances int, increment int) error {
+func (cb concurrentBatch) addToAllBalances(numberOfBalances int, increment int) error {
 	err := cb.concurrencyMng.ScheduleUpdateBalances(numberOfBalances, func(ids <-chan int, errors chan<- error) {
 		for id := range ids {
-			err := cb.singleOpMng.add(id, increment)
+			err := cb.singleOpMng.addBalance(id, increment)
 			logger.Zap().Error("failed to increase balance", zap.Int("id", id), zap.Error(err))
 			errors <- err
 		}

@@ -1,2 +1,2 @@
-//TODO add package doc
+//TODO addBalance package doc
 package balance

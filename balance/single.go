@@ -6,9 +6,9 @@ import (
 )
 
 type singleOperationManager interface {
-	create(id int) error
-	get(id int) (int, error)
-	add(id int, increment int) error
+	createBalance(id int) error
+	getBalance(id int) (int, error)
+	addBalance(id int, increment int) error
 }
 
 type singleOperationImpl struct {
@@ -16,7 +16,7 @@ type singleOperationImpl struct {
 	amountMng  AmountManager
 }
 
-func (s singleOperationImpl) create(id int) error {
+func (s singleOperationImpl) createBalance(id int) error {
 	amount, err := s.amountMng.GenerateBalanceAmount(id)
 	if err != nil {
 		logger.Zap().Error("failed to generate balance amount", zap.Int("id", id), zap.Error(err))
@@ -32,7 +32,7 @@ func (s singleOperationImpl) create(id int) error {
 	return nil
 }
 
-func (s singleOperationImpl) get(id int) (int, error) {
+func (s singleOperationImpl) getBalance(id int) (int, error) {
 	balance, err := s.storageMng.GetBalance(id)
 	if err != nil {
 		logger.Zap().Error("failed to fetch balance", zap.Int("id", id), zap.Error(err))
@@ -42,7 +42,7 @@ func (s singleOperationImpl) get(id int) (int, error) {
 	return balance, nil
 }
 
-func (s singleOperationImpl) add(id int, increment int) error {
+func (s singleOperationImpl) addBalance(id int, increment int) error {
 	err := s.storageMng.IncreaseBalance(id, increment)
 	if err != nil {
 		logger.Zap().Error("failed to increase balance", zap.Int("id", id), zap.Error(err))
