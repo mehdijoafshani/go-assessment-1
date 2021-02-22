@@ -18,3 +18,4 @@ The project should include a config file, which stores the directory of these fi
 - Add error on get/update methods as there is no balance file
 - Enhance project terminology
 - Rollback changes when batch update is failed
+- Wrap zap(logger) over an interface
