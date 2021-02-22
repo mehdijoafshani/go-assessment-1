@@ -5,10 +5,10 @@ import (
 	"go.uber.org/zap"
 )
 
-type pooling struct {
+type poolingWaitForAll struct {
 }
 
-func (p pooling) start(jobsNum int, maxGoroutines int, worker func(ids <-chan int, results chan<- int, error chan<- error), resultHandler func(result int)) error {
+func (p poolingWaitForAll) start(jobsNum int, maxGoroutines int, worker func(ids <-chan int, results chan<- int, error chan<- error), resultHandler func(result int)) error {
 	jobs := make(chan int, jobsNum)
 	results := make(chan int, jobsNum)
 	errorCh := make(chan error, jobsNum)
@@ -39,6 +39,6 @@ func (p pooling) start(jobsNum int, maxGoroutines int, worker func(ids <-chan in
 	return nil
 }
 
-func createPoolingPattern() pooling {
-	return pooling{}
+func createPoolingWaitForAllPattern() poolingWaitForAll {
+	return poolingWaitForAll{}
 }
