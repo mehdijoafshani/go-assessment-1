@@ -1,10 +1,10 @@
 # Go Assessment Project
 
-### Description
+### 1.1 Description
 A Go project with some API which retrieves/modifies some files containing the balance of accounts. 
 The project should include a config file, which stores the directory of these files. 
 
-#### Requirements
+#### 2.1 Requirements
 - An API to create a number of accounts (balance files) in the directory
     - The balance of each account should be generated randomly, ranging from 1,000 to 100,000
     - These files (accounts' balances) could be created only once
@@ -12,17 +12,25 @@ The project should include a config file, which stores the directory of these fi
 - An API to add number x to the balance of one/all account(s)
 - Specify the pieces of code which have applied SOLID principle
 
-#### Guide
+#### 3.1 Guide
 - Comment
   - Search for #SOLID to see the examples of applied SOLID principles
   - Search for #TODO to see the possible improvements which I could not implement in the specified time period
   - Search for #Desc to see my reasons for making some specific decisions
+
+##### 3.2 Project structure
+from the highest level to lowest:
+1. API layer (./api)
+2. The business layer (./account)
+3. The internal layer (./internal)
   
 #### TODO
-- Implement delete
-- Define more explicit error types, and assert them in tests and also use them to return more explicit HTTP error codes
-- Add error on get/update methods as there is no balance file
-- Enhance project terminology
+- Add more tests
+- Implement delete API
+- Define more explicit error types 
+  - assert them in tests 
+  - use them to return more explicit HTTP error codes
+- Add error in get/update methods when there is no balance file
 - Rollback changes when batch update is failed
-- Wrap zap(logger) over an interface
+- Wrap zap(logger) by an interface
 - Put data validation on config
