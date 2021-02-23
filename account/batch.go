@@ -6,6 +6,9 @@ package account
 // This indicates that Open/Closed principle has been applied here
 // We have to pay attention that critical changes should be applied and extending is not for all cases
 
+// #SOLID: L
+// Maybe another example of Liskov Principle and how two different batch operations (serial and concurrent) could be substituted with each other)
+
 // the operation which process a number of procedure
 // (the procedure could be performed either concurrently or serially)
 type batchOperationManager interface {
