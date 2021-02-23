@@ -95,6 +95,7 @@ func accountsGet(c *gin.Context) {
 		// TODO: declare business api to support returning a list all the accounts (ids and values)
 		// Its difference in concurrent mode would be the way we protect the global slice in the memory (which all go routines will add an account to)
 		// We need to use locking (mutex) around the piece of code that inserts into the slice in that case
+		c.String(http.StatusNotImplemented, "not implemented")
 	default:
 		c.String(http.StatusUnprocessableEntity, "please specify the result mod (aggregate,...)")
 	}
