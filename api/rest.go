@@ -119,8 +119,7 @@ func accountsPut(c *gin.Context) {
 		id = noId
 	}
 
-	switch id {
-	case noId:
+	if id == noId {
 		//add to all balances
 		err = manager.AddToAll(balance)
 		if err != nil {
@@ -129,7 +128,9 @@ func accountsPut(c *gin.Context) {
 			c.String(http.StatusInternalServerError, "failed to add balance")
 			return
 		}
-	default:
+		c.String(http.StatusOK, "the extra balance %d is applied to all accounts", balance)
+		return
+	} else {
 		// apply on one specific balance
 		err = manager.Add(balance, id)
 		if err != nil {
@@ -138,10 +139,8 @@ func accountsPut(c *gin.Context) {
 			c.String(http.StatusInternalServerError, "failed to add balance")
 			return
 		}
-
+		c.String(http.StatusOK, "the extra balance %d is applied to account with id %d", balance, id)
 	}
-
-	c.String(http.StatusOK, "the extra balance %d is applied to all accounts", balance)
 }
 
 func StartRestServer() error {
