@@ -30,7 +30,7 @@ from the highest level to lowest:
 - Define more explicit error types 
   - assert them in tests 
   - use them to return more explicit HTTP error codes
-- Add error in get/update methods when there is no balance file
+- return error in get/update methods when there is no balance file
 - Rollback changes when batch update is failed
 - Wrap zap(logger) by an interface
 - Put data validation on config
