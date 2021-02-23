@@ -19,7 +19,7 @@ import (
 // However, each API (REST, gRPC, ...) would need a separate set of arguments in their methods, I decided to keep it as it is.
 var manager balanceManager
 
-func create(c *gin.Context) {
+func accountsPost(c *gin.Context) {
 	numberS := c.DefaultQuery("number", strconv.Itoa(config.Data.DefaultAccountNumbers))
 
 	number, err := strconv.Atoi(numberS)
@@ -44,7 +44,7 @@ func create(c *gin.Context) {
 	c.String(http.StatusOK, "%d accounts are created", number)
 }
 
-func getBalance(c *gin.Context) {
+func balanceGet(c *gin.Context) {
 	idStr := c.Query("id")
 
 	id, err := strconv.Atoi(idStr)
@@ -68,21 +68,33 @@ func getBalance(c *gin.Context) {
 	c.String(http.StatusOK, "%d", balance)
 }
 
-func getAllBalances(c *gin.Context) {
-	balance, err := manager.GetAll()
-	if err != nil {
-		logger.Zap().Error("failed to get all balances", zap.Error(err))
-		// TODO: return more explicit error code
-		c.String(http.StatusInternalServerError, "failed to get all balances")
-		return
-	}
+func balancesGet(c *gin.Context) {
+	res := c.Query("result")
 
-	c.String(http.StatusOK, "%d", balance)
+	switch res {
+	// to return sum of all balances
+	case "aggregate":
+		balance, err := manager.GetAll()
+		if err != nil {
+			logger.Zap().Error("failed to get all balances", zap.Error(err))
+			// TODO: return more explicit error code
+			c.String(http.StatusInternalServerError, "failed to get all balances")
+			return
+		}
+		c.String(http.StatusOK, "%d", balance)
+	// to return the list all balances
+	case "list":
+		// TODO: declare business api to support returning a list all the accounts (ids and values)
+		// Its difference in concurrent mode would be the way we protect the global slice in the memory (which all go routines will add an account to)
+		// We need to use locking (mutex) around the piece of code that inserts into the slice in that case
+	default:
+		c.String(http.StatusUnprocessableEntity, "please specify the result mod (aggregate,...)")
+	}
 }
 
-func addBalance(c *gin.Context) {
+func balancePost(c *gin.Context) {
 	idS := c.Query("id")
-	balanceS := c.Query("balance")
+	balanceS := c.Query("increase")
 
 	id, err := strconv.Atoi(idS)
 	if err != nil {
@@ -120,8 +132,8 @@ func addBalance(c *gin.Context) {
 	c.String(http.StatusOK, "the extra balance %d  is applied to id %d", balance, id)
 }
 
-func addToAllBalances(c *gin.Context) {
-	balanceS := c.Query("balance")
+func balancesPost(c *gin.Context) {
+	balanceS := c.Query("increase")
 
 	balance, err := strconv.Atoi(balanceS)
 	if err != nil {
@@ -155,14 +167,11 @@ func StartRestServer() error {
 	// TODO fix gin logger
 
 	r := gin.New()
-	r.POST("/create", create)
-	r.GET("/getBalance", getBalance)
-	r.GET("/getAllBalances", getAllBalances)
-	r.PUT("/addBalance", addBalance)
-	r.PUT("/addToAllBalances", addToAllBalances)
-	// TODO: declare another api to list all the accounts (ids and values)
-	// Its difference in concurrent mode would be the way we protect the global slice (which all go routines add an account to)
-	// We need to use locking (mutex) in that case
+	r.POST("/accounts", accountsPost)
+	r.GET("/balance", balanceGet)
+	r.GET("/balances", balancesGet)
+	r.PUT("/balance", balancePost)
+	r.PUT("/balances", balancesPost)
 
 	err := r.Run(":" + config.Data.RestPort)
 	if err != nil {
