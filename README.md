@@ -12,7 +12,7 @@ The project should include a config file, which stores the directory of these fi
 - An API to add number x to the balance of one/all account(s)
 - Specify the pieces of code which have applied SOLID principle
 
-#### 3.1 Guide
+##### 3.1 Guide
 - Comment
   - Search for #SOLID to see the examples of applied SOLID principles
   - Search for #TODO to see the possible improvements which I could not implement in the specified time period
