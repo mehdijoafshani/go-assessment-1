@@ -2,7 +2,6 @@
   "accountsDir": "/home/joe/go/src/github.com/mehdijoafshani/go-assessment-1/test/testdata",
   "logsFile": "/home/joe/testspace/testlogs",
   "isConcurrent": true,
-  "isProduction": false,
   "restPort": "8080",
   "defaultAccountNumbers": 100,
   "randomBalanceMinRange": 1000,
