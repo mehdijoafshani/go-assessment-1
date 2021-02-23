@@ -160,6 +160,9 @@ func StartRestServer() error {
 	r.GET("/getAllBalances", getAllBalances)
 	r.PUT("/addBalance", addBalance)
 	r.PUT("/addToAllBalances", addToAllBalances)
+	// TODO: declare another api to list all the accounts (ids and values)
+	// Its difference in concurrent mode would be the way we protect the global slice (which all go routines add an account to)
+	// We need to use locking (mutex) in that case
 
 	err := r.Run(":" + config.Data.RestPort)
 	if err != nil {
