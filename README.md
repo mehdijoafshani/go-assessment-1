@@ -25,12 +25,23 @@ from the highest level to lowest:
 3. The internal layer (./internal)
 
 #### 4.1 How to use
-#### 4.2 Sample API call
+##### 4.2 Sample API call
 - **Create accounts** URL: `localhost:8080/accounts?number=1000` Verb: `POST`
 - **Get a balance** URL: `localhost:8080/accounts?id=12` Verb: `GET`
 - **Get sum of all balances** URL: `localhost:8080/accounts?result=aggregate` Verb: `GET`
 - **increase a balance** URL: `localhost:8080/accounts?id=12&increase=1000` Verb: `PUT`
 - **increase all balances** URL: `localhost:8080/accounts?increase=1000` Verb: `PUT`
+##### 4.3 Config
+-   **accountsDir**: string, the directory which keeps the accounts files
+-   **logsFile**: string, the file path to store logs
+-   **isConcurrent**: boolean, to check if the service should behave concurrently
+-   **isProduction**: boolean, production vs debug (excluded from config_test)
+-   **restPort**: number, rest api port
+-   **defaultAccountNumbers**: number, the default number of accounts to created
+-   **randomBalanceMinRange**: number, the min range of random balance generation
+-   **randomBalanceMaxRange**: number, the max range of random balance generation
+-   **maxConcurrentGoroutines**: number, the max number of concurrent go routines
+-   **accountFileExtension**: text, the file extension of accounts including a dot (.txt)
   
 #### 5.1 TODO
 - Add more tests
@@ -41,4 +52,4 @@ from the highest level to lowest:
 - return error in get/update methods when there is no balance file
 - Rollback changes when batch update is failed
 - Wrap zap(logger) by an interface
-- Put data validation on config
+- Put data validation on config (random balance generation range for instance)
