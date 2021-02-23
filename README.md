@@ -23,8 +23,16 @@ from the highest level to lowest:
 1. API layer (./api)
 2. The business layer (./account)
 3. The internal layer (./internal)
+
+#### 4.1 How to use
+#### 4.2 Sample API call
+- **Create accounts** URL: `localhost:8080/accounts?number=1000` Verb: `POST`
+- **Get a balance** URL: `localhost:8080/accounts?id=12` Verb: `GET`
+- **Get sum of all balances** URL: `localhost:8080/accounts?result=aggregate` Verb: `GET`
+- **increase a balance** URL: `localhost:8080/accounts?id=12&increase=1000` Verb: `PUT`
+- **increase all balances** URL: `localhost:8080/accounts?increase=1000` Verb: `PUT`
   
-#### TODO
+#### 5.1 TODO
 - Add more tests
 - Implement delete API
 - Define more explicit error types 
