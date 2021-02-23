@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
+	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
 )
 
 type Account struct {
@@ -24,7 +24,7 @@ func init() {
 func ChangeNumberOfAccounts(accounts int) {
 	Accounts = make([]Account, 0, accounts)
 	for i := 0; i < accounts; i++ {
-		balance, err := amount.CreateAmountManager().GenerateBalance(i)
+		balance, err := balance.CreateAmountManager().GenerateBalance(i)
 		if err != nil {
 			panic("failed to generate test data, failed to generate amount")
 		}

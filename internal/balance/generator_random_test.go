@@ -1,4 +1,4 @@
-package amount
+package balance
 
 import (
 	"github.com/stretchr/testify/assert"

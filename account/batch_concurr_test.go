@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
+	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
 	"github.com/mehdijoafshani/go-assessment-1/internal/concurrency"
 	"github.com/mehdijoafshani/go-assessment-1/internal/storage"
 	"github.com/mehdijoafshani/go-assessment-1/test"
@@ -12,7 +12,7 @@ import (
 
 func concurrentBatchOperation() concurrentBatch {
 	storageMng := storage.CreateManager()
-	amountMng := amount.CreateAmountManager()
+	amountMng := balance.CreateAmountManager()
 	singleOpMng := createSingleOperationTask(storageMng, amountMng)
 	concurrencyMng := concurrency.CreateManager()
 

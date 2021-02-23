@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
+	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
 	"github.com/mehdijoafshani/go-assessment-1/internal/storage"
 	"github.com/mehdijoafshani/go-assessment-1/test"
 	"github.com/stretchr/testify/assert"
@@ -11,7 +11,7 @@ import (
 
 func serialBatchOperation() serialBatch {
 	storageMng := storage.CreateManager()
-	amountMng := amount.CreateAmountManager()
+	amountMng := balance.CreateAmountManager()
 	singleOpMng := createSingleOperationTask(storageMng, amountMng)
 
 	return createSerialBatch(storageMng, amountMng, singleOpMng)

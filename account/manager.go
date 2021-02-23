@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/mehdijoafshani/go-assessment-1/internal/amount"
+	"github.com/mehdijoafshani/go-assessment-1/internal/balance"
 	"github.com/mehdijoafshani/go-assessment-1/internal/concurrency"
 	"github.com/mehdijoafshani/go-assessment-1/internal/logger"
 	"github.com/mehdijoafshani/go-assessment-1/internal/storage"
@@ -104,7 +104,7 @@ func (m Manager) Add(increment int, id int) error {
 
 func CreateManager(isConcurrent bool) Manager {
 	storageMng := storage.CreateManager()
-	amountMng := amount.CreateAmountManager()
+	amountMng := balance.CreateAmountManager()
 	singleOpMng := createSingleOperationTask(storageMng, amountMng)
 	concurrencyMng := concurrency.CreateManager()
 
